@@ -6,6 +6,17 @@ Imports Microsoft.VisualBasic.Imaging.SVG
 
 Module CLI
 
+    Sub New()
+        Dim template As String = App.HOME & "/Templates/test.csv"
+
+        If Not template.FileExists Then
+            Call {
+                New Data With {.state = "CN", .value = 255},
+                New Data With {.state = "US", .value = 1}
+            }.SaveTo(template)
+        End If
+    End Sub
+
     <ExportAPI("/Rendering",
                Usage:="/Rendering /in <data.csv> [/map <map.svg> /iso_3166 <iso_3166.csv> /out <out.svg>]")>
     Public Function Rendering(args As CommandLine) As Integer
