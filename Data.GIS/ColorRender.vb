@@ -14,9 +14,8 @@ Public Module ColorRender
         Dim BlankMap_World6 As String = res.GetString(NameOf(BlankMap_World6))
 
         __iso_3166 = ImportsData(Of ISO_3166)(ISO_3166_1,)
-        __worldMap = BlankMap_World6.LoadFromXml(Of SVGXml)(False)
-
-        Call BlankMap_World6.__DEBUG_ECHO
+        __worldMap = BlankMap_World6 _
+            .LoadFromXml(Of SVGXml)(False)
     End Sub
 
     <Extension>
