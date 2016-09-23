@@ -1,9 +1,12 @@
-﻿Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Imaging.SVG
-Imports Microsoft.VisualBasic.SoftwareToolkits
+﻿Imports System.Drawing
+Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.csv
-Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
+Imports Microsoft.VisualBasic.Mathematical
+Imports Microsoft.VisualBasic.SoftwareToolkits
 
 Public Module ColorRender
 
@@ -34,11 +37,24 @@ Public Module ColorRender
     End Sub
 
     <Extension>
-    Public Function Rendering(data As IEnumerable(Of Data)) As SVGXml
+    Public Function Rendering(data As IEnumerable(Of Data), Optional mapLevels As Integer = 512) As SVGXml
         Dim empty As SVGXml = __worldMap
+        Dim array As Data() = data.ToArray
+        Dim values As Double() = array _
+            .Select(Function(x) x.value) _
+            .Distinct.ToArray
+        Dim maps As New ColorMap(mapLevels)
+        Dim clSequence As Color() = ColorSequence(maps.GetMaps("Jet"), maps).Reverse.ToArray
+        Dim mappings As Dictionary(Of Double, Integer) =
+            values.GenerateMapping(mapLevels) _
+            .SeqIterator _
+            .ToDictionary(Function(x) values(x.i),
+                          Function(x) x.obj)
 
-        For Each state As Data In data
+        For Each state As Data In array
             Dim c As g = empty.__country(state.state)
+            Dim color As Color = clSequence(mappings(state.value))
+            Call c.FillColor(color.RGBExpression)
         Next
 
         Return empty
