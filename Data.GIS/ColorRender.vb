@@ -44,6 +44,18 @@ Public Module ColorRender
         Return empty
     End Function
 
+    <Extension> Public Sub FillColor(g As g, color As String)
+        g.style = $"fill: {color};"
+
+        For Each [sub] As g In g.gs.SafeQuery
+            Call [sub].FillColor(color)
+        Next
+
+        For Each path As path In g.path.SafeQuery
+            path.style = g.style
+        Next
+    End Sub
+
     ''' <summary>
     ''' thanks to the XML/HTML style of the SVG (and Nathan’s explanation) I can create CSS classes per country 
     ''' (the polygons of each country uses the alpha-2 country code as a class id)
