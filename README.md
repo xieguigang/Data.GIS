@@ -1,5 +1,5 @@
 # Data.GIS
-GIS data visualization of VisualBasic hybrids with SVG/CSS
+Data visualization of the information about and appraisal of an epidemic or population population genetics datadata by associated withwith  GIS byby using VisualBasic hybrids with SVG/CSS
 
 ![](./etc.png)
 
