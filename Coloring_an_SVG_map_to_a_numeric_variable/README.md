@@ -2,6 +2,7 @@
 
 ###### Using R to turn a grey World into one filled with colors
 > http://www.visualcinnamon.com/2013/03/showing-life-expectancy-around-world.html
+>
 > **Tags:** Open data, R, SVG
 
 ![](./WorlMapLifeExpectancyBanner.png)
