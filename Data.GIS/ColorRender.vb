@@ -45,14 +45,14 @@ Public Module ColorRender
         Dim maps As New ColorMap(mapLevels)
         Dim clSequence As Color() = ColorSequence(maps.GetMaps("Jet"), maps).Reverse.ToArray
         Dim mappings As Dictionary(Of Double, Integer) =
-            values.GenerateMapping(mapLevels) _
+            values.GenerateMapping(mapLevels / 2) _
             .SeqIterator _
             .ToDictionary(Function(x) values(x.i),
                           Function(x) x.obj)
 
         For Each state As Data In array
             Dim c As g = empty.__country(state.state)
-            Dim color As Color = clSequence(mappings(state.value))
+            Dim color As Color = clSequence(mappings(state.value) - 1)
             Call c.FillColor(color.RGBExpression)
         Next
 
@@ -94,8 +94,12 @@ Public Module ColorRender
         Dim state As New Value(Of g)
 
         For Each c As g In subs
-            If String.Equals(alpha2, c.[class], StringComparison.OrdinalIgnoreCase) Then
+            If String.Equals(alpha2, c.id, StringComparison.OrdinalIgnoreCase) Then
                 Return c
+            Else
+                If c.gs.IsNullOrEmpty Then
+                    Continue For
+                End If
             End If
 
             If Not (state = c.gs.__country(alpha2)) Is Nothing Then
