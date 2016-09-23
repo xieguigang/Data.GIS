@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{3C61A45D-6914-448E-B8C8-8953ACD1994A}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>CLI.Module1</StartupObject>
+    <StartupObject>CLI.Program</StartupObject>
     <RootNamespace>CLI</RootNamespace>
     <AssemblyName>CLI</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -69,7 +69,8 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Module1.vb" />
+    <Compile Include="CLI.vb" />
+    <Compile Include="Program.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

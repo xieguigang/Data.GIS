@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.Data.GIS.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Microsoft.VisualBasic.Data.GIS.My.MySettings
             Get
-                Return Global.Data.GIS.My.MySettings.Default
+                Return Global.Microsoft.VisualBasic.Data.GIS.My.MySettings.Default
             End Get
         End Property
     End Module
