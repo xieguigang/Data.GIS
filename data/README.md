@@ -1,4 +1,6 @@
-# BlankMap-World6.svg: Robinson projection, national borders, areas grouped.
+### BlankMap-World6.svg: Robinson projection, national borders, areas grouped.
+
+![](./BlankMap-World6.svg)
 
 > https://en.wikipedia.org/wiki/Wikipedia:Blank_maps#/media/File:BlankMap-World6.svg
 
