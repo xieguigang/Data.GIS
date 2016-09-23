@@ -61,12 +61,27 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Looks up a localized resource of type System.Byte[].
+        '''  Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        '''&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; height=&quot;1314&quot; id=&quot;svg2985&quot; version=&quot;1.1&quot; viewBox=&quot;82.992 45.607 2528.5721 1428.3294&quot; width=&quot;2560&quot;&gt;
+        '''  &lt;title&gt;World Map&lt;/title&gt;
+        '''  &lt;defs id=&quot;defs2987&quot;/&gt;
+        '''  &lt;style id=&quot;style_css_sheet&quot; type=&quot;text/css&quot;&gt; 
+        '''/*
+        ''' * Below are Cascading Style Sheet (CSS) definitions in use in this file,
+        ''' * which allow easily changing how countries are displayed.
+        ''' *
+        ''' */
+        '''
+        '''/*
+        ''' * Circles around small countries
+        ''' *
+        ''' * Change opacity to 1 to display all circles.
+        ''' *
+        ''' [rest of string was truncated]&quot;;.
         '''</summary>
-        Friend ReadOnly Property BlankMap_World6() As Byte()
+        Friend ReadOnly Property BlankMap_World6() As String
             Get
-                Dim obj As Object = ResourceManager.GetObject("BlankMap_World6", resourceCulture)
-                Return CType(obj,Byte())
+                Return ResourceManager.GetString("BlankMap_World6", resourceCulture)
             End Get
         End Property
         
