@@ -65,6 +65,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MapDefaultColors.vb" />
     <Compile Include="Data.vb" />
     <Compile Include="ColorRender.vb" />
     <Compile Include="ISO_3166.vb" />

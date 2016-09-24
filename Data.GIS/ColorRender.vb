@@ -47,16 +47,26 @@ Public Module ColorRender
     ''' <returns></returns>
     <Extension>
     Public Function Rendering(data As IEnumerable(Of Data),
-                              Optional mapLevels As Integer = 512,
+                              Optional mapLevels As Integer = 256,
                               Optional mapTemplate As String = Nothing,
-                              Optional mapName As String = ColorMap.PatternWinter) As SVGXml
+                              Optional mapName As String = Nothing) As SVGXml
         Dim empty As SVGXml = SVGXml.TryLoad(If(String.IsNullOrEmpty(mapTemplate), BlankMap_World6, mapTemplate))
         Dim array As Data() = data.ToArray
         Dim values As Double() = array _
             .Select(Function(x) x.value) _
             .Distinct.ToArray
-        Dim maps As New ColorMap(mapLevels)
-        Dim clSequence As Color() = ColorSequence(maps.GetMaps(mapName), maps)
+        Dim clSequence As Color()
+        If Not String.IsNullOrEmpty(mapName) AndAlso
+            Not mapName.TextEquals("default") Then
+            Dim maps As New ColorMap(mapLevels)
+            clSequence = ColorSequence(maps.GetMaps(mapName), maps)
+        Else
+            If mapLevels = 512 Then
+                clSequence = MapDefaultColors.DefaultColors512
+            Else
+                clSequence = MapDefaultColors.DefaultColors256
+            End If
+        End If
         Dim mappings As Dictionary(Of Double, Integer) =
             values.GenerateMapping(mapLevels / 2) _
             .SeqIterator _
