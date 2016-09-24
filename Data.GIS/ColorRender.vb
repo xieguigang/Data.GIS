@@ -52,14 +52,14 @@ Public Module ColorRender
                               Optional mapName As String = Nothing,
                               Optional ByRef legend As Bitmap = Nothing) As SVGXml
 
-        Dim empty As SVGXml = SVGXml.TryLoad(
+        Dim renderedMap As SVGXml = SVGXml.TryLoad(
             If(String.IsNullOrEmpty(mapTemplate),
             BlankMap_World6,
             mapTemplate))
         Dim designer As New ColorDesigner(data, mapName, mapLevels)
 
         For Each state As Data In designer.data
-            Dim c As node = empty.__country(state.state)
+            Dim c As node = renderedMap.__country(state.state)
 
             If c Is Nothing Then
                 Continue For
@@ -75,8 +75,16 @@ Public Module ColorRender
         Next
 
         legend = designer.DrawLegend("Title")
+        renderedMap.images = {
+            New SVG.Image(legend) With {
+                .height = legend.Height * 0.5,
+                .width = legend.Width * 0.5,
+                .x = .width / 2,
+                .y = renderedMap.height - .height * 0.8
+            }
+        }
 
-        Return empty
+        Return renderedMap
     End Function
 
     <Extension> Public Sub FillColor(ByRef g As node, color As String)
