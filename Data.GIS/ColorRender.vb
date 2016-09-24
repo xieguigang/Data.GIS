@@ -15,7 +15,8 @@ Public Module ColorRender
     ''' <see cref="SVGXml"/>
     ''' </summary>
     ReadOnly BlankMap_World6 As String
-    ReadOnly statDict As Dictionary(Of String, String)
+
+    Public ReadOnly statDict As Dictionary(Of String, String)
 
     Sub New()
         Dim res As New Resources(GetType(ColorRender))

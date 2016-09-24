@@ -6,6 +6,7 @@ Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Mathematical
+Imports Microsoft.VisualBasic.Serialization.JSON
 Imports Microsoft.VisualBasic.SoftwareToolkits
 
 Public Class ColorDesigner
@@ -15,7 +16,6 @@ Public Class ColorDesigner
     Public raw As Double()
 
     Dim mappings As Dictionary(Of Double, Integer)
-    Dim translate As Func(Of Double, Double) = AddressOf Math.Log
 
     Public ReadOnly Property Depth As Integer
         Get
@@ -23,10 +23,16 @@ Public Class ColorDesigner
         End Get
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="mapName"></param>
+    ''' <param name="mapLevels">对于默认的颜色谱，只允许10/256/512这三个值</param>
     Sub New(data As IEnumerable(Of Data), mapName As String, mapLevels As Integer)
         Dim array As Data() = data.ToArray
         Dim values As Double() = array _
-            .Select(Function(x) translate(x.value)) _
+            .Select(Function(x) x.value) _
             .Distinct.ToArray
 
         If Not String.IsNullOrEmpty(mapName) AndAlso
@@ -36,6 +42,8 @@ Public Class ColorDesigner
         Else
             If mapLevels = 512 Then
                 Colors = MapDefaultColors.DefaultColors512
+            ElseIf mapLevels = 10 Then
+                Colors = MapDefaultColors.DefaultColors10
             Else
                 Colors = MapDefaultColors.DefaultColors256
             End If
@@ -48,9 +56,23 @@ Public Class ColorDesigner
         Me.data = array
         Me.raw = array.ToArray(Function(x) x.value)
 
+        Dim trim As New List(Of Data)
+
         For Each x In Me.data
-            x.value = translate(x.value)
+            Dim alpha2 As String =
+                If(statDict.ContainsKey(x.state),
+                statDict(x.state),
+                statDict.TryGetValue(x.state.ToLower))
+
+            If alpha2 Is Nothing Then
+                Call $"Unable found Object named '{x.GetJson}'!".PrintException
+                Continue For
+            End If
+
+            trim += x
         Next
+
+        Me.data = trim
     End Sub
 
     Public Function GetColor(x As Double) As Color

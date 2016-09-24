@@ -47,6 +47,10 @@ Public Module MapDefaultColors
         "#083D6D", "#093D6C", "#093D6B"
     }
 
+    Public ReadOnly HexDefault10 As String() = {"#CCEBC5", "#B9E4BA", "#A3DBB5", "#8AD0BC", "#72CACB", "#5BBFD6", "#3595C4", "#0D5FA3", "#004D97", "#08589E"}
+
     Public ReadOnly Property DefaultColors512 As Color() = HexDefaults512.ToArray(AddressOf ColorTranslator.FromHtml)
     Public ReadOnly Property DefaultColors256 As Color() = HexDefault256.ToArray(AddressOf ColorTranslator.FromHtml)
+    Public ReadOnly Property DefaultColors10 As Color() = HexDefault10.ToArray(AddressOf ColorTranslator.FromHtml)
+
 End Module
