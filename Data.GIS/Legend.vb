@@ -8,7 +8,7 @@ Public Module Legend
     <Extension>
     Public Function DrawLegend(designer As ColorDesigner, title As String, Optional bg As String = "transparent") As Bitmap
         Return GraphicsPlots(
-            New Size(500, 1000), New Size(50, 50), bg,
+            New Size(800, 1000), New Size(50, 50), bg,
             Sub(g, grect)
                 Dim graphicsRegion As Rectangle = grect.GraphicsRegion
                 Dim size As Size = grect.Size
@@ -18,7 +18,7 @@ Public Module Legend
                 Dim font As New Font(FontFace.MicrosoftYaHei, 42)
                 Dim fSize As SizeF
                 Dim pt As Point
-                Dim rectWidth As Integer = graphicsRegion.Width * 2 / 3
+                Dim rectWidth As Integer = 150
                 Dim legendsHeight As Integer = size.Height - (margin.Height * 3) - grayHeight * 3
                 Dim d As Integer = legendsHeight / designer.Depth
                 Dim left As Integer = margin.Width + 30 + rectWidth

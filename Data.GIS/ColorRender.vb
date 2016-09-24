@@ -146,7 +146,7 @@ Public Module ColorRender
 
     <Extension>
     Private Function __country(subs As path(), alpha2 As String) As path
-        For Each path As path In subs
+        For Each path As path In subs.SafeQuery
             If path.id.TextEquals(alpha2) Then
                 Return path
             End If
@@ -156,8 +156,8 @@ Public Module ColorRender
     End Function
 
     <Extension>
-    Private Function __country(subs As g(), alpha2 As String) As g
-        Dim state As New Value(Of g)
+    Private Function __country(subs As g(), alpha2 As String) As node
+        Dim state As New Value(Of node)
 
         For Each c As g In subs
             If alpha2.TextEquals(c.id) Then
@@ -170,6 +170,10 @@ Public Module ColorRender
 
             If Not (state = c.gs.__country(alpha2)) Is Nothing Then
                 Return state
+            End If
+
+            If Not (state = c.path.__country(alpha2)) Is Nothing Then
+                Return state  ' fix error for GF island
             End If
         Next
 
