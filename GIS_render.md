@@ -40,7 +40,7 @@ All of the command that available in this program has been list below:
 
 ###### Usage
 ```bash
-GIS_render /Rendering /in <data.csv> [/map.levels <512> /map <map.svg> /map.Name <default> /out <out.svg>]
+GIS_render /Rendering /in <data.csv> [/main <title> /legend.title <legend title> /map.levels <512> /map <map.svg> /map.Name <default> /out <out.svg>]
 ```
 ###### Example
 ```bash
