@@ -44,7 +44,7 @@ Public Module Legend
                     left,
                     y - (fSize.Height - grayHeight) / 2)
                 Call g.FillRectangle(
-                    Brushes.Gray,
+                    Brushes.LightGray,
                     New Rectangle(New Point(margin.Width, y),
                                   New Size(rectWidth, grayHeight)))
                 Call g.DrawString("Unknown", font, Brushes.Black, pt)
