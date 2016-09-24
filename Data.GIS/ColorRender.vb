@@ -45,14 +45,14 @@ Public Module ColorRender
     ''' <param name="mapTemplate">Using this parameter for custom map template.(自定义的地图模板)</param>
     ''' <returns></returns>
     <Extension>
-    Public Function Rendering(data As IEnumerable(Of Data), Optional mapLevels As Integer = 512, Optional mapTemplate As String = Nothing) As SVGXml
+    Public Function Rendering(data As IEnumerable(Of Data), Optional mapLevels As Integer = 512, Optional mapTemplate As String = Nothing, Optional mapName As String = ColorMap.PatternCool) As SVGXml
         Dim empty As SVGXml = SVGXml.TryLoad(If(String.IsNullOrEmpty(mapTemplate), BlankMap_World6, mapTemplate))
         Dim array As Data() = data.ToArray
         Dim values As Double() = array _
             .Select(Function(x) x.value) _
             .Distinct.ToArray
         Dim maps As New ColorMap(mapLevels)
-        Dim clSequence As Color() = ColorSequence(maps.GetMaps("Jet"), maps).Reverse.ToArray
+        Dim clSequence As Color() = ColorSequence(maps.GetMaps(mapName), maps).Reverse.ToArray
         Dim mappings As Dictionary(Of Double, Integer) =
             values.GenerateMapping(mapLevels / 2) _
             .SeqIterator _
@@ -61,7 +61,12 @@ Public Module ColorRender
 
         For Each state As Data In array
             Dim c As g = empty.__country(state.state)
-            Dim color As Color = clSequence(mappings(state.value) - 1)
+            Dim mapsColor As Color = clSequence(mappings(state.value) - 1)
+            Dim color As Color = If(
+                String.IsNullOrEmpty(state.color),
+                mapsColor,
+                state.color.ToColor(
+                onFailure:=mapsColor))
             Call c.FillColor(color.RGBExpression)
         Next
 

@@ -8,6 +8,11 @@ Public Class Data
     ''' <returns></returns>
     Public Property state As String
     Public Property value As Double
+    ''' <summary>
+    ''' The color property overrides color mappings value.
+    ''' </summary>
+    ''' <returns></returns>
+    Public Property color As String
 
     Public Overrides Function ToString() As String
         Return Me.GetJson
