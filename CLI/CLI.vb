@@ -26,9 +26,6 @@ Module CLI
             mapTemplate:=map.ReadAllText(throwEx:=False, suppress:=True),
             mapName:=mapName,
             legend:=legend)
-
-        Call legend.SaveAs(out.TrimSuffix & "-legend.png")
-
         Return svg.SaveAsXml(out).CLICode
     End Function
 End Module

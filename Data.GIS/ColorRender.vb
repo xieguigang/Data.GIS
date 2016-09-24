@@ -50,13 +50,16 @@ Public Module ColorRender
                               Optional mapLevels As Integer = 256,
                               Optional mapTemplate As String = Nothing,
                               Optional mapName As String = Nothing,
-                              Optional ByRef legend As Bitmap = Nothing) As SVGXml
+                              Optional ByRef legend As Bitmap = Nothing,
+                              Optional title As String = "Legend title") As SVGXml
 
         Dim renderedMap As SVGXml = SVGXml.TryLoad(
             If(String.IsNullOrEmpty(mapTemplate),
             BlankMap_World6,
             mapTemplate))
         Dim designer As New ColorDesigner(data, mapName, mapLevels)
+
+        Call renderedMap.Reset(Color.LightGray)
 
         For Each state As Data In designer.data
             Dim c As node = renderedMap.__country(state.state)
@@ -74,18 +77,30 @@ Public Module ColorRender
             Call c.FillColor(color.RGBExpression)
         Next
 
-        legend = designer.DrawLegend("Title")
-        renderedMap.images = {
+        legend = designer.DrawLegend(title)
+        renderedMap.images = {    ' 将所生成legend图片镶嵌进入SVG矢量图之中
             New SVG.Image(legend) With {
                 .height = legend.Height * 0.5,
                 .width = legend.Width * 0.5,
                 .x = .width / 2,
-                .y = renderedMap.height - .height * 0.8
+                .y = renderedMap.height - .height
             }
         }
 
         Return renderedMap
     End Function
+
+    <Extension>
+    Public Sub Reset(ByRef svg As SVGXml, baseColor As Color)
+        Dim color As String = baseColor.RGBExpression
+
+        For Each g As g In svg.gs.SafeQuery
+            Call g.FillColor(color)
+        Next
+        For Each path As path In svg.path.SafeQuery
+            Call path.FillColor(color)
+        Next
+    End Sub
 
     <Extension> Public Sub FillColor(ByRef g As node, color As String)
         g.style = $"fill: {color};"  ' path/g
