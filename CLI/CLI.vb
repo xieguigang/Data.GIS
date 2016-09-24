@@ -8,12 +8,12 @@ Imports Microsoft.VisualBasic.Imaging.SVG
 Module CLI
 
     <ExportAPI("/Rendering",
-               Usage:="/Rendering /in <data.csv> [/map.levels <256> /map <map.svg> /map.Name <default> /iso_3166 <iso_3166.csv> /out <out.svg>]")>
+               Usage:="/Rendering /in <data.csv> [/map.levels <512> /map <map.svg> /map.Name <default> /iso_3166 <iso_3166.csv> /out <out.svg>]")>
     Public Function Rendering(args As CommandLine) As Integer
         Dim [in] As String = args("/in")
         Dim map As String = args("/map")
         Dim iso_3166 As String = args("/iso_3166")
-        Dim levels As Integer = args.GetValue("/map.levels", 256)
+        Dim levels As Integer = args.GetValue("/map.levels", 512)
         Dim mapName As String = args.GetValue("/map.Name", "default")
         Dim out As String = args.GetValue(
             "/out",

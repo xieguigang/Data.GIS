@@ -52,8 +52,9 @@ Public Module ColorRender
                               Optional mapName As String = Nothing) As SVGXml
         Dim empty As SVGXml = SVGXml.TryLoad(If(String.IsNullOrEmpty(mapTemplate), BlankMap_World6, mapTemplate))
         Dim array As Data() = data.ToArray
+        Dim translate As Func(Of Double, Double) = AddressOf Math.Log
         Dim values As Double() = array _
-            .Select(Function(x) x.value) _
+            .Select(Function(x) translate(x.value)) _
             .Distinct.ToArray
         Dim clSequence As Color()
         If Not String.IsNullOrEmpty(mapName) AndAlso
@@ -80,7 +81,7 @@ Public Module ColorRender
                 Continue For
             End If
 
-            Dim mapsColor As Color = clSequence(mappings(state.value) - 1)
+            Dim mapsColor As Color = clSequence(mappings(translate(state.value)) - 1)
             Dim color As Color = If(
                 String.IsNullOrEmpty(state.color),
                 mapsColor,
