@@ -11,3 +11,5 @@ Adapted from Brianski's File:BlankMap-World3.svg by Canuckguy and originally bas
 ### Test Data: Life expectancy at birth, male (years)
 
 [./API_SP.DYN.LE00.MA.IN_DS2_en_csv_v2](./API_SP.DYN.LE00.MA.IN_DS2_en_csv_v2/) data was download from worldbank: http://data.worldbank.org/indicator/SP.DYN.LE00.MA.IN using year 2014 as ``Data.value``
+
+![](./API_SP.DYN.LE00.MA.IN_DS2.rendering%3Blevels%3D256%2Cmap.Name%3Ddefault.png)
