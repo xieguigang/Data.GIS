@@ -50,38 +50,20 @@ Public Module ColorRender
                               Optional mapLevels As Integer = 256,
                               Optional mapTemplate As String = Nothing,
                               Optional mapName As String = Nothing) As SVGXml
-        Dim empty As SVGXml = SVGXml.TryLoad(If(String.IsNullOrEmpty(mapTemplate), BlankMap_World6, mapTemplate))
-        Dim array As Data() = data.ToArray
-        Dim translate As Func(Of Double, Double) = AddressOf Math.Log
-        Dim values As Double() = array _
-            .Select(Function(x) translate(x.value)) _
-            .Distinct.ToArray
-        Dim clSequence As Color()
-        If Not String.IsNullOrEmpty(mapName) AndAlso
-            Not mapName.TextEquals("default") Then
-            Dim maps As New ColorMap(mapLevels)
-            clSequence = ColorSequence(maps.GetMaps(mapName), maps)
-        Else
-            If mapLevels = 512 Then
-                clSequence = MapDefaultColors.DefaultColors512
-            Else
-                clSequence = MapDefaultColors.DefaultColors256
-            End If
-        End If
-        Dim mappings As Dictionary(Of Double, Integer) =
-            values.GenerateMapping(mapLevels / 2) _
-            .SeqIterator _
-            .ToDictionary(Function(x) values(x.i),
-                          Function(x) x.obj)
+        Dim empty As SVGXml = SVGXml.TryLoad(
+            If(String.IsNullOrEmpty(mapTemplate),
+            BlankMap_World6,
+            mapTemplate))
+        Dim designer As New ColorDesigner(data, mapName, mapLevels)
 
-        For Each state As Data In array
+        For Each state As Data In designer.data
             Dim c As node = empty.__country(state.state)
 
             If c Is Nothing Then
                 Continue For
             End If
 
-            Dim mapsColor As Color = clSequence(mappings(translate(state.value)) - 1)
+            Dim mapsColor As Color = designer.GetColor(state.value)
             Dim color As Color = If(
                 String.IsNullOrEmpty(state.color),
                 mapsColor,

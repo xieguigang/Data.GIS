@@ -65,10 +65,12 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ColorDesigner.vb" />
     <Compile Include="MapDefaultColors.vb" />
     <Compile Include="Data.vb" />
     <Compile Include="ColorRender.vb" />
     <Compile Include="ISO_3166.vb" />
+    <Compile Include="Legend.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
