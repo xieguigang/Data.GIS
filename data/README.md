@@ -7,3 +7,7 @@
 A detailed Robinson projection SVG map with grouping enabled to connect all non-contiguous parts of a country's territory for easy colouring. Smaller countries can also be represented by larger circles to show their data easier. A thorough description of use and other instructions relating to can be found on the [instruction page](https://commons.wikimedia.org/wiki/File_talk:BlankMap-World6.svg/Documentation).
 
 Adapted from Brianski's File:BlankMap-World3.svg by Canuckguy and originally based on CIA's political world map
+
+### Test Data: Life expectancy at birth, male (years)
+
+[./API_SP.DYN.LE00.MA.IN_DS2_en_csv_v2](./API_SP.DYN.LE00.MA.IN_DS2_en_csv_v2/) data was download from worldbank: http://data.worldbank.org/indicator/SP.DYN.LE00.MA.IN using year 2014 as ``Data.value``

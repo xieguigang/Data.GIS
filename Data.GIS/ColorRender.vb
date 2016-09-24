@@ -46,7 +46,7 @@ Public Module ColorRender
     ''' <param name="mapTemplate">Using this parameter for custom map template.(自定义的地图模板)</param>
     ''' <returns></returns>
     <Extension>
-    Public Function Rendering(data As IEnumerable(Of Data), Optional mapLevels As Integer = 512, Optional mapTemplate As String = Nothing, Optional mapName As String = ColorMap.PatternCool) As SVGXml
+    Public Function Rendering(data As IEnumerable(Of Data), Optional mapLevels As Integer = 512, Optional mapTemplate As String = Nothing, Optional mapName As String = ColorMap.PatternWinter) As SVGXml
         Dim empty As SVGXml = SVGXml.TryLoad(If(String.IsNullOrEmpty(mapTemplate), BlankMap_World6, mapTemplate))
         Dim array As Data() = data.ToArray
         Dim values As Double() = array _
@@ -62,6 +62,11 @@ Public Module ColorRender
 
         For Each state As Data In array
             Dim c As node = empty.__country(state.state)
+
+            If c Is Nothing Then
+                Continue For
+            End If
+
             Dim mapsColor As Color = clSequence(mappings(state.value) - 1)
             Dim color As Color = If(
                 String.IsNullOrEmpty(state.color),
@@ -109,7 +114,7 @@ Public Module ColorRender
             c = map.path.__country(alpha2)
 
             If c Is Nothing Then
-                Throw New NullReferenceException($"Unable found Object named '{code}'!")
+                Call $"Unable found Object named '{code}'!".PrintException
             End If
         End If
 
