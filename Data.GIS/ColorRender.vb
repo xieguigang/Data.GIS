@@ -27,6 +27,7 @@ Public Module ColorRender
         statDict = (From x As ISO_3166
                     In __iso_3166
                     Select {
+                        x.name.ToLower,
                         x.alpha2,
                         x.alpha3,
                         x.code}.Select(Function(code) New With {
@@ -60,7 +61,7 @@ Public Module ColorRender
                           Function(x) x.obj)
 
         For Each state As Data In array
-            Dim c As g = empty.__country(state.state)
+            Dim c As node = empty.__country(state.state)
             Dim mapsColor As Color = clSequence(mappings(state.value) - 1)
             Dim color As Color = If(
                 String.IsNullOrEmpty(state.color),
@@ -73,16 +74,20 @@ Public Module ColorRender
         Return empty
     End Function
 
-    <Extension> Public Sub FillColor(g As g, color As String)
-        g.style = $"fill: {color};"
+    <Extension> Public Sub FillColor(ByRef g As node, color As String)
+        g.style = $"fill: {color};"  ' path/g
 
-        For Each [sub] As g In g.gs.SafeQuery
-            Call [sub].FillColor(color)
-        Next
+        If TypeOf g Is g Then
+            Dim x As g = DirectCast(g, g)
 
-        For Each path As path In g.path.SafeQuery
-            path.style = g.style
-        Next
+            For Each [sub] As g In x.gs.SafeQuery
+                Call [sub].FillColor(color)
+            Next
+
+            For Each path As path In x.path.SafeQuery
+                path.style = g.style
+            Next
+        End If
     End Sub
 
     ''' <summary>
@@ -93,14 +98,33 @@ Public Module ColorRender
     ''' <param name="code"></param>
     ''' <returns></returns>
     <Extension>
-    Private Function __country(map As SVGXml, code As String) As g
-        Dim c As g = map.gs.__country(alpha2:=statDict(code))
+    Private Function __country(map As SVGXml, code As String) As node
+        Dim alpha2 As String =
+            If(statDict.ContainsKey(code),
+            statDict(code),
+            statDict.TryGetValue(code.ToLower))
+        Dim c As node = map.gs.__country(alpha2)
 
         If c Is Nothing Then
-            Throw New NullReferenceException($"Unable found object named '{code}'!")
-        Else
-            Return c
+            c = map.path.__country(alpha2)
+
+            If c Is Nothing Then
+                Throw New NullReferenceException($"Unable found Object named '{code}'!")
+            End If
         End If
+
+        Return c
+    End Function
+
+    <Extension>
+    Private Function __country(subs As path(), alpha2 As String) As path
+        For Each path As path In subs
+            If path.id.TextEquals(alpha2) Then
+                Return path
+            End If
+        Next
+
+        Return Nothing
     End Function
 
     <Extension>
@@ -108,7 +132,7 @@ Public Module ColorRender
         Dim state As New Value(Of g)
 
         For Each c As g In subs
-            If String.Equals(alpha2, c.id, StringComparison.OrdinalIgnoreCase) Then
+            If alpha2.TextEquals(c.id) Then
                 Return c
             Else
                 If c.gs.IsNullOrEmpty Then
