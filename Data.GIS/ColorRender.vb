@@ -49,7 +49,9 @@ Public Module ColorRender
     Public Function Rendering(data As IEnumerable(Of Data),
                               Optional mapLevels As Integer = 256,
                               Optional mapTemplate As String = Nothing,
-                              Optional mapName As String = Nothing) As SVGXml
+                              Optional mapName As String = Nothing,
+                              Optional ByRef legend As Bitmap = Nothing) As SVGXml
+
         Dim empty As SVGXml = SVGXml.TryLoad(
             If(String.IsNullOrEmpty(mapTemplate),
             BlankMap_World6,
@@ -71,6 +73,8 @@ Public Module ColorRender
                 onFailure:=mapsColor))
             Call c.FillColor(color.RGBExpression)
         Next
+
+        legend = designer.DrawLegend("Title")
 
         Return empty
     End Function

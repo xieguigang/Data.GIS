@@ -12,10 +12,16 @@ Public Class ColorDesigner
 
     Public Colors As Color()
     Public data As Data()
+    Public raw As Double()
 
-    Dim clSequence As Color()
     Dim mappings As Dictionary(Of Double, Integer)
     Dim translate As Func(Of Double, Double) = AddressOf Math.Log
+
+    Public ReadOnly Property Depth As Integer
+        Get
+            Return Colors.Length
+        End Get
+    End Property
 
     Sub New(data As IEnumerable(Of Data), mapName As String, mapLevels As Integer)
         Dim array As Data() = data.ToArray
@@ -26,12 +32,12 @@ Public Class ColorDesigner
         If Not String.IsNullOrEmpty(mapName) AndAlso
             Not mapName.TextEquals("default") Then
             Dim maps As New ColorMap(mapLevels)
-            clSequence = ColorSequence(maps.GetMaps(mapName), maps)
+            Colors = ColorSequence(maps.GetMaps(mapName), maps)
         Else
             If mapLevels = 512 Then
-                clSequence = MapDefaultColors.DefaultColors512
+                Colors = MapDefaultColors.DefaultColors512
             Else
-                clSequence = MapDefaultColors.DefaultColors256
+                Colors = MapDefaultColors.DefaultColors256
             End If
         End If
 
@@ -40,6 +46,7 @@ Public Class ColorDesigner
             .ToDictionary(Function(x) values(x.i),
                           Function(x) x.obj)
         Me.data = array
+        Me.raw = array.ToArray(Function(x) x.value)
 
         For Each x In Me.data
             x.value = translate(x.value)
@@ -47,6 +54,6 @@ Public Class ColorDesigner
     End Sub
 
     Public Function GetColor(x As Double) As Color
-        Return clSequence(mappings(x) - 1)
+        Return Colors(mappings(x) - 1)
     End Function
 End Class

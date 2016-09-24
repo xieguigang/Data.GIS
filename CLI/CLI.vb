@@ -1,4 +1,5 @@
-﻿Imports Microsoft.VisualBasic.CommandLine
+﻿Imports System.Drawing
+Imports Microsoft.VisualBasic.CommandLine
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.GIS
@@ -19,10 +20,15 @@ Module CLI
             "/out",
             [in].TrimSuffix & $".rendering;levels={levels},map.Name={mapName}.svg")
         Dim data As IEnumerable(Of Data) = [in].LoadCsv(Of Data)
+        Dim legend As Bitmap = Nothing
         Dim svg As SVGXml = data.Rendering(
             levels,
             mapTemplate:=map.ReadAllText(throwEx:=False, suppress:=True),
-            mapName:=mapName)
+            mapName:=mapName,
+            legend:=legend)
+
+        Call legend.SaveAs(out.TrimSuffix & "-legend.png")
+
         Return svg.SaveAsXml(out).CLICode
     End Function
 End Module
