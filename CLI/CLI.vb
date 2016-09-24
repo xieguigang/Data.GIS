@@ -5,11 +5,29 @@ Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.GIS
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.SVG
+Imports Microsoft.VisualBasic.Scripting.MetaData
 
-Module CLI
+<PackageNamespace("GIS_rendering.Utilities.CLI",
+                  Description:="Data visualization for the information about and appraisal of an epidemic or human population genetics data associated with GIS data by using VisualBasic language hybrids with SVG/CSS.",
+                  Category:=APICategories.CLI_MAN,
+                  Publisher:="xie.guigang@gcmodeller.org")>
+<ExceptionHelp(Documentation:="https://github.com/xieguigang/Data.GIS/tree/master/Coloring_an_SVG_map_to_a_numeric_variable",
+               EMailLink:="xie.guigang@gcmodeller.org",
+               Debugging:="http://blog.xieguigang.me/")>
+Public Module CLI
 
     <ExportAPI("/Rendering",
-               Usage:="/Rendering /in <data.csv> [/map.levels <512> /map <map.svg> /map.Name <default> /iso_3166 <iso_3166.csv> /out <out.svg>]")>
+               Usage:="/Rendering /in <data.csv> [/map.levels <512> /map <map.svg> /map.Name <default> /out <out.svg>]")>
+    <ParameterInfo("/in", False,
+                   AcceptTypes:={GetType(Data)},
+                   Description:="A data file template example can be found in the ./Templates/ folder.")>
+    <ParameterInfo("/map.levels", True, AcceptTypes:={GetType(Integer)},
+                   Description:="Any positive integer value, this will adjust the color depth for the value mappings.")>
+    <ParameterInfo("/map", True,
+                   Description:="User custom map svg, please note that the id attribute of the ``g`` or ``path`` object in the svg stands for the country for region should be the iso-3166-1 alpha2 code.")>
+    <ParameterInfo("/map.Name", True, AcceptTypes:={GetType(String)},
+                   Description:="The color map pattern profile name, the VisualBasic language build in color patterns name can be found at github: https://github.com/xieguigang/VisualBasic_AppFramework/tree/master/gr
+                   And this value is set as ``default`` if this parameter is not specified, in this situation, the parameter value of /map.levels is only allowd 256 or 512.")>
     Public Function Rendering(args As CommandLine) As Integer
         Dim [in] As String = args("/in")
         Dim map As String = args("/map")

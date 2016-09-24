@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("CLI")>
-<Assembly: AssemblyDescription("")>
-<Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("CLI")>
-<Assembly: AssemblyCopyright("Copyright ©  2016")>
-<Assembly: AssemblyTrademark("")>
+<Assembly: AssemblyTitle("GIS_render CLI tool")>
+<Assembly: AssemblyDescription("Data visualization for the information about and appraisal of an epidemic or human population genetics data associated with GIS data by using VisualBasic language hybrids with SVG/CSS.")>
+<Assembly: AssemblyCompany("xieguigang")>
+<Assembly: AssemblyProduct("GIS_render")>
+<Assembly: AssemblyCopyright("Copyright © http://xieguigang.me 2016")>
+<Assembly: AssemblyTrademark("VisualBasic")>
 
 <Assembly: ComVisible(False)>
 
