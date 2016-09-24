@@ -11,16 +11,18 @@ Imports Microsoft.VisualBasic.SoftwareToolkits
 Public Module ColorRender
 
     ReadOnly __iso_3166 As ISO_3166()
-    ReadOnly __worldMap As SVGXml
+    ''' <summary>
+    ''' <see cref="SVGXml"/>
+    ''' </summary>
+    ReadOnly BlankMap_World6 As String
     ReadOnly statDict As Dictionary(Of String, String)
 
     Sub New()
         Dim res As New Resources(GetType(ColorRender))
         Dim ISO_3166_1 As String = res.GetString(NameOf(ISO_3166_1))
-        Dim BlankMap_World6 As String = res.GetString(NameOf(BlankMap_World6))
 
-        __worldMap = SVGXml.TryLoad(BlankMap_World6)
         __iso_3166 = ImportsData(Of ISO_3166)(ISO_3166_1,)
+        BlankMap_World6 = res.GetString(NameOf(BlankMap_World6))
 
         statDict = (From x As ISO_3166
                     In __iso_3166
@@ -35,9 +37,16 @@ Public Module ColorRender
                             Function(x) x.alpha2)
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="mapLevels"></param>
+    ''' <param name="mapTemplate">Using this parameter for custom map template.(自定义的地图模板)</param>
+    ''' <returns></returns>
     <Extension>
-    Public Function Rendering(data As IEnumerable(Of Data), Optional mapLevels As Integer = 512) As SVGXml
-        Dim empty As SVGXml = __worldMap
+    Public Function Rendering(data As IEnumerable(Of Data), Optional mapLevels As Integer = 512, Optional mapTemplate As String = Nothing) As SVGXml
+        Dim empty As SVGXml = SVGXml.TryLoad(If(String.IsNullOrEmpty(mapTemplate), BlankMap_World6, mapTemplate))
         Dim array As Data() = data.ToArray
         Dim values As Double() = array _
             .Select(Function(x) x.value) _
