@@ -81,3 +81,51 @@ Microsoft.VisualBasic.Mathematical::[ScaleMaps.GenerateMapping(System.Collection
     Return chunkBuf
 End Function
 ```
+
+### Insert image into SVG
+
+About how to embedded the image into SVG, please review on this stackoverflow problem: http://stackoverflow.com/questions/6249664/does-svg-support-embedding-of-bitmap-images
+
+Here is the svg image object that define in VisualBasic language:
+
+```vbnet
+Public Class Image
+
+    <XmlAttribute> Public Property x As Double
+    <XmlAttribute> Public Property y As Double
+    <XmlAttribute> Public Property width As String
+    <XmlAttribute> Public Property height As String
+    <XmlAttribute("image.data")> Public Property data As String
+
+    ''' <summary>
+    ''' ``data:image/png;base64,...``
+    ''' </summary>
+    Const base64Header As String = "data:image/png;base64,"
+
+    Sub New()
+    End Sub
+
+    Sub New(image As Bitmap, Optional size As Size = Nothing)
+        data = base64Header & image.ToBase64String
+        If size.IsEmpty Then
+            size = image.Size
+        End If
+        width = size.Width
+        height = size.Height
+    End Sub
+End Class
+```
+
+And after the legend image was output from the ``DrawLegend`` function, that we can creates a svg image object and put on the specific position on the svg Image by calculated the x and y position value.
+
+```vbnet
+legend = designer.DrawLegend(title)
+renderedMap.images = {                  ' 将所生成legend图片镶嵌进入SVG矢量图之中
+    New SVG.Image(legend) With {
+        .height = legend.Height * 0.5,
+        .width = legend.Width * 0.5,
+        .x = .width / 2,
+        .y = renderedMap.height - .height
+    }
+}
+```
