@@ -214,6 +214,94 @@ End Function
 
 ![](./WorlMapLifeExpectancyBanner.png)
 
+The color maps in this tools have eight patterns:
+
+```vbnet
+''' <summary>
+''' Spring
+''' </summary>
+Public Const PatternSpring As String = "Spring"
+''' <summary>
+''' Summer
+''' </summary>
+Public Const PatternSummer As String = "Summer"
+''' <summary>
+''' Autumn
+''' </summary>
+Public Const PatternAutumn As String = "Autumn"
+''' <summary>
+''' Winter
+''' </summary>
+Public Const PatternWinter As String = "Winter"
+''' <summary>
+''' Jet
+''' </summary>
+Public Const PatternJet As String = "Jet"
+''' <summary>
+''' Gray
+''' </summary>
+Public Const PatternGray As String = "Gray"
+''' <summary>
+''' Hot
+''' </summary>
+Public Const PatternHot As String = "Hot"
+''' <summary>
+''' Cool
+''' </summary>
+Public Const PatternCool As String = "Cool"
+```
+
+The color pattern generated code can be found at this codeproject article:
+> "Create Custom Color Maps in C#": http://www.codeproject.com/Articles/18150/Create-Custom-Color-Maps-in-C
+
+And also additional three color pattern are provides from this R script result:
+
+```R
+require(fields)
+# Loading required package: fields
+# Loading required package: spam
+# Loading required package: grid
+# Spam version 1.3-0 (2015-10-24) is loaded.
+# Type 'help( Spam)' or 'demo( spam)' for a short introduction 
+# and overview of this package.
+# Help for individual functions is also obtained by adding the
+# suffix '.spam' to the function name, e.g. 'help( chol.spam)'.
+#
+# Attaching package: ‘spam’
+#
+# The following objects are masked from ‘package:base’:
+#
+#     backsolve, forwardsolve
+#
+# Loading required package: maps
+#
+#   maps v3.1: updated 'world': all lakes moved to separate new #
+#   'lakes' database. Type '?world' or 'news(package="maps")'.  #
+
+designer.colors(n=10, col=c("#CCEBC5", "#A8DDB5", "#7BCCC4", "#4EB3D3", "#08589E", "#08589E"))
+designer.colors(n=256, col=c("#CCEBC5", "#A8DDB5", "#7BCCC4", "#4EB3D3", "#08589E", "#08589E"))
+designer.colors(n=512, col=c("#CCEBC5", "#A8DDB5", "#7BCCC4", "#4EB3D3", "#08589E", "#08589E"))
+```
+
+#### Fill color on ploygon
+
+```vbnet
+<Extension> Public Sub FillColor(ByRef g As node, color As String)
+    g.style = $"fill: {color};"  ' path/g
+
+    If TypeOf g Is g Then
+        Dim x As g = DirectCast(g, g)
+
+        For Each [sub] As g In x.gs.SafeQuery
+            Call [sub].FillColor(color)
+        Next
+
+        For Each path As path In x.path.SafeQuery
+            path.style = g.style
+        Next
+    End If
+End Sub
+```
 
 #### Insert image into SVG
 
@@ -264,6 +352,8 @@ renderedMap.images = {                  ' 将所生成legend图片镶嵌进入SV
 ```
 
 ## Example
+
+A demo CLI tools for this rendering
 
 ### CLI tool
 
