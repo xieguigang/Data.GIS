@@ -212,6 +212,7 @@ End Function
 
 #### Generates the color patterns
 
+![](./WorlMapLifeExpectancyBanner.png)
 
 
 #### Insert image into SVG
@@ -304,3 +305,17 @@ Public Function Rendering(args As CommandLine) As Integer
     Return svg.SaveAsXml(out).CLICode
 End Function
 ```
+
+###### CLI usage
+
+```bash
+/Rendering /in <data.csv> [/main <title> /legend.title <legend title> /map.levels <512> /map <map.svg> /map.Name <default> /out <out.svg>]
+```
+
+#### Gallery
+
+###### Test rendering with ``/map.levels = 512, /map.Name = Summer``
+![](./API_SP.DYN.LE00.MA.IN_DS2.rendering;levels=512,map.Name=summer.png)
+
+###### Test rendering with ``/map.levels = 20, /map.Name = Jet``
+![](./API_SP.DYN.LE00.MA.IN_DS2.rendering;levels=20,map.Name=Jet.png)
