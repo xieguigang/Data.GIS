@@ -2,16 +2,16 @@
 
 The new VB.NET language that applied in data science.
 
-> For the furthering developement of this program, install the Microsoft VisualBasic CLI App runtime from nuget at first:
-> ```
-> PM> Install-Package VB_AppFramework
-> ```
-> And then add reference to these dll modules:
->
-> + Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll (VB.NET runtime core)
-> + Microsoft.VisualBasic.Data.Csv.dll
-> + Microsoft.VisualBasic.MIME.Markup.dll
-> + Microsoft.VisualBasic.Imaging.dll
+For the furthering developement of this program, install the Microsoft VisualBasic CLI App runtime from nuget at first:
+```
+PM> Install-Package VB_AppFramework
+```
+And then add reference to these dll modules:
+
++ Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll (VB.NET runtime core)
++ Microsoft.VisualBasic.Data.Csv.dll
++ Microsoft.VisualBasic.MIME.Markup.dll
++ Microsoft.VisualBasic.Imaging.dll
 
 ##### Acknowledgement
 
