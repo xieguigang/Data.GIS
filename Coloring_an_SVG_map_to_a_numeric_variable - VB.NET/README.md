@@ -26,7 +26,124 @@ This modified blank map svg data can be found at my github repository: https://g
 
 ### 2. How to rendering the colors on SVG Polygon?
 
-### 3. Level Mappings
+From the observation on the data structure of the SVG elements in the blank world map data, that we can know that all of the svg graphics object ``g`` and polygon object ``path`` have the ``style`` attribute for applying CSS style and ``id`` attribute for identify the country or region object, here is a example of the svg document:
+
+```xml
+<g style="fill: rgb(204,0,0);" id="fr">
+   ...
+   <path style="fill: rgb(204,0,0);" class="landxx fr gf eu" id="gf" d="..." />
+   <title>France</title>
+</g>
+```
+
+**So that all we needs to do just found the country or region object by using the ``id`` attribute and then calculate the mapped color for that object and set the CSS value string to the ``style`` attribute, that we can done our job on this rendering work.**
+
+### 3. The color renderer
+
+#### Using ISO-3166_1 found svg object
+
+```vbnet
+Imports Microsoft.VisualBasic.Serialization.JSON
+
+Public Class ISO_3166
+
+    Public Property name As String
+    Public Property alpha2 As String
+    Public Property alpha3 As String
+    Public Property code As String
+
+    Public Overrides Function ToString() As String
+        Return Me.GetJson
+    End Function
+End Class
+```
+
+And by creates this dictionary will makes the input country name compatible with all fields in the ISO-3166_1 data. And then by using this dictionary that we can translate the input keyword as the iso-3166-1 alpha2 code for finding the svg graphics or path object.
+
+```vbnet
+Public ReadOnly statDict As Dictionary(Of String, String)
+
+statDict = (From x As ISO_3166
+            In __iso_3166
+            Select {
+                x.name.ToLower,
+                x.alpha2,
+                x.alpha3,
+                x.code}.Select(Function(code) New With {
+                    .code = code,
+                    .alpha2 = x.alpha2
+                })).MatrixAsIterator.ToDictionary(
+                    Function(x) x.code,
+                    Function(x) x.alpha2)
+```
+
+So that by using the iso-3166 alpha2 code, that we can found any country object in the map svg data by using the code below:
+
+```vbnet
+''' <summary>
+''' thanks to the XML/HTML style of the SVG (and Nathan’s explanation) I can create CSS classes per country
+''' (the polygons of each country uses the alpha-2 country code as a class id)
+''' </summary>
+''' <param name="map"></param>
+''' <param name="code"></param>
+''' <returns></returns>
+<Extension>
+Private Function __country(map As SVGXml, code As String) As node
+    Dim alpha2 As String =
+        If(statDict.ContainsKey(code),
+        statDict(code),
+        statDict.TryGetValue(code.ToLower))
+    Dim c As node = map.gs.__country(alpha2)
+
+    If c Is Nothing Then
+        c = map.path.__country(alpha2)
+
+        If c Is Nothing Then
+            Call $"Unable found Object named '{code}'!".PrintException
+        End If
+    End If
+
+    Return c
+End Function
+
+<Extension>
+Private Function __country(subs As path(), alpha2 As String) As path
+    For Each path As path In subs.SafeQuery
+        If path.id.TextEquals(alpha2) Then
+            Return path
+        End If
+    Next
+
+    Return Nothing
+End Function
+
+<Extension>
+Private Function __country(subs As g(), alpha2 As String) As node
+    Dim state As New Value(Of node)
+
+    For Each c As g In subs
+        If alpha2.TextEquals(c.id) Then
+            Return c
+        Else
+            If c.gs.IsNullOrEmpty Then
+                Continue For
+            End If
+        End If
+
+        If Not (state = c.gs.__country(alpha2)) Is Nothing Then
+            Return state
+        End If
+
+        If Not (state = c.path.__country(alpha2)) Is Nothing Then
+            Return state  ' fix error for GF island
+        End If
+    Next
+
+    Return Nothing
+End Function
+```
+
+#### Level Mappings
 
 By measure the difference of value ``x`` with the minimum value of the vector elements, and then calculate the proportion by Divided the difference with the extreme distance of the max and min value in the input vector, that we can do a linear scale mapping of the input data:
 
@@ -82,7 +199,11 @@ Microsoft.VisualBasic.Mathematical::[ScaleMaps.GenerateMapping(System.Collection
 End Function
 ```
 
-### Insert image into SVG
+#### Generates the color patterns
+
+
+
+#### Insert image into SVG
 
 About how to embedded the image into SVG, please review on this stackoverflow problem: http://stackoverflow.com/questions/6249664/does-svg-support-embedding-of-bitmap-images
 
