@@ -10,31 +10,38 @@ Imports Microsoft.VisualBasic.SoftwareToolkits
 
 Public Module ColorRender
 
-    ReadOnly __iso_3166 As ISO_3166()
     ''' <summary>
     ''' <see cref="SVGXml"/>
     ''' </summary>
     ReadOnly BlankMap_World6 As String
 
-    Public ReadOnly statDict As Dictionary(Of String, String)
+    Public ReadOnly Property statDict As Dictionary(Of String, String)
+
+    Const ManualResourceWarning As String = "Sattlite assembly would not working on Linux/Mac platform, please manual setup the resource."
 
     Sub New()
-        Dim res As New Resources(GetType(ColorRender))
-        Dim ISO_3166_1 As String = res.GetString(NameOf(ISO_3166_1))
+        If App.IsMicrosoftPlatform Then
+            Dim res As New Resources(GetType(ColorRender))
+            Dim ISO_3166_1 As String = res.GetString(NameOf(ISO_3166_1))
 
-        __iso_3166 = ImportsData(Of ISO_3166)(ISO_3166_1,)
-        BlankMap_World6 = res.GetString(NameOf(BlankMap_World6))
+            SetISO_3166(ImportsData(Of ISO_3166)(ISO_3166_1,))
+            BlankMap_World6 = res.GetString(NameOf(BlankMap_World6))
+        Else
+            Call ManualResourceWarning.Warning
+        End If
+    End Sub
 
-        statDict = (From x As ISO_3166
-                    In __iso_3166
-                    Select {
-                        x.name.ToLower,
-                        x.alpha2,
-                        x.alpha3,
-                        x.code}.Select(Function(code) New With {
+    <Extension> Public Sub SetISO_3166(__iso_3166 As IEnumerable(Of ISO_3166))
+        _statDict = (From x As ISO_3166
+                     In __iso_3166
+                     Select {
+                         x.name.ToLower,
+                         x.alpha2,
+                         x.alpha3,
+                         x.code}.Select(Function(code) New With {
                             .code = code,
                             .alpha2 = x.alpha2
-                        })).MatrixAsIterator.ToDictionary(
+                         })).MatrixAsIterator.ToDictionary(
                             Function(x) x.code,
                             Function(x) x.alpha2)
     End Sub

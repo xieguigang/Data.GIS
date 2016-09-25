@@ -17,7 +17,7 @@ Imports Microsoft.VisualBasic.Scripting.MetaData
 Public Module CLI
 
     <ExportAPI("/Rendering",
-               Usage:="/Rendering /in <data.csv> [/main <title> /legend.title <legend title> /map.levels <512> /map <map.svg> /map.Name <default> /out <out.svg>]")>
+               Usage:="/Rendering /in <data.csv> [/main <title> /legend.title <legend title> /map.levels <512> /map <map.svg> /iso_3166 <iso_3166.csv> /map.Name <default> /out <out.svg>]")>
     <ParameterInfo("/in", False,
                    AcceptTypes:={GetType(Data)},
                    Description:="A data file template example can be found in the ./Templates/ folder.")>
@@ -41,6 +41,11 @@ Public Module CLI
         Dim data As IEnumerable(Of Data) = [in].LoadCsv(Of Data)
         Dim legend As Bitmap = Nothing
         Dim legendTitle As String = args.GetValue("/legend.title", "Legend title")
+
+        If iso_3166.FileExists Then
+            Call iso_3166.LoadCsv(Of ISO_3166).SetISO_3166
+        End If
+
         Dim svg As SVGXml = data.Rendering(
             levels,
             mapTemplate:=map.ReadAllText(throwEx:=False, suppress:=True),
