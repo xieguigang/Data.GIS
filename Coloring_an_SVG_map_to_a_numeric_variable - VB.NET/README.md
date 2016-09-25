@@ -53,6 +53,8 @@ From the observation on the data structure of the SVG elements in the blank worl
 
 #### Using ISO-3166_1 found svg object
 
+The polygon object in the blank world map SVG is using the iso-3166 alpha2 code as identifier, but the problem is that in the most situation that we input the data is using the country name not this brief code, so that we just using a dictionary to translate the country name or other brief code to the required iso-3166 alpha2 code:
+
 ```vbnet
 Imports Microsoft.VisualBasic.Serialization.JSON
 
@@ -357,9 +359,9 @@ renderedMap.images = {                  ' 将所生成legend图片镶嵌进入SV
 
 ## Example
 
-A demo CLI tools for this rendering
+A demo CLI tools for this rendering tool can be found in the attachments.
 
-### CLI tool
+##### CLI tool
 
 ```vbnet
 <ExportAPI("/Rendering",
@@ -403,13 +405,13 @@ End Function
 ###### CLI usage
 
 ```bash
-/Rendering /in <data.csv> [/main <title> /legend.title <legend title> /map.levels <512> /map <map.svg> /map.Name <default> /out <out.svg>]
+GIS_render /Rendering /in <data.csv> [/main <title> /legend.title <legend title> /map.levels <512> /map <map.svg> /iso_3166 <iso_3166.csv> /map.Name <default> /out <out.svg>]
 ```
 
-#### Gallery
+##### Gallery
 
-###### Test rendering with ``/map.levels = 512, /map.Name = Summer``
+###### Test rendering with ``/map.levels = 512; /map.Name = Summer``
 ![](./API_SP.DYN.LE00.MA.IN_DS2.rendering;levels=512,map.Name=summer.png)
 
-###### Test rendering with ``/map.levels = 20, /map.Name = Jet``
+###### Test rendering with ``/map.levels = 20; /map.Name = Jet``
 ![](./API_SP.DYN.LE00.MA.IN_DS2.rendering;levels=20,map.Name=Jet.png)
