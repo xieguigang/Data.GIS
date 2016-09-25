@@ -214,7 +214,7 @@ End Function
 
 ![](./WorlMapLifeExpectancyBanner.png)
 
-The color maps in this tools have eight patterns:
+The color maps in this tools have eight patterns, which can be assign from the renderer function's ``mapName`` parameter:
 
 ```vbnet
 ''' <summary>
@@ -254,7 +254,7 @@ Public Const PatternCool As String = "Cool"
 The color pattern generated code can be found at this codeproject article:
 > "Create Custom Color Maps in C#": http://www.codeproject.com/Articles/18150/Create-Custom-Color-Maps-in-C
 
-And also additional three color pattern are provides from this R script result:
+And also additional three color pattern are provides from this R script result, and the render function using this R generated color pattern with 256 mapping level depth:
 
 ```R
 require(fields)
@@ -262,7 +262,7 @@ require(fields)
 # Loading required package: spam
 # Loading required package: grid
 # Spam version 1.3-0 (2015-10-24) is loaded.
-# Type 'help( Spam)' or 'demo( spam)' for a short introduction 
+# Type 'help( Spam)' or 'demo( spam)' for a short introduction
 # and overview of this package.
 # Help for individual functions is also obtained by adding the
 # suffix '.spam' to the function name, e.g. 'help( chol.spam)'.
@@ -285,6 +285,8 @@ designer.colors(n=512, col=c("#CCEBC5", "#A8DDB5", "#7BCCC4", "#4EB3D3", "#08589
 
 #### Fill color on ploygon
 
+As we've described above, all of the graphics and path object in the SVG image that have a attribute for applied the CSS style which is named ``style``, so that we just assign the CSS fill style into this attribute that we can fill the specific color into the target polygon object, here is the code:
+
 ```vbnet
 <Extension> Public Sub FillColor(ByRef g As node, color As String)
     g.style = $"fill: {color};"  ' path/g
@@ -305,7 +307,9 @@ End Sub
 
 #### Insert image into SVG
 
-About how to embedded the image into SVG, please review on this stackoverflow problem: http://stackoverflow.com/questions/6249664/does-svg-support-embedding-of-bitmap-images
+![](./legend-levels=20,map.Name=Jet.png)
+
+Finally we can rendering the map with various colors, and we needs a legend to indicates that what the meaning of these color. Drawing a legend by using gdi+ is super easy and embedded this generated legend image into the Svg image is also easy. About how to embedded the image into SVG, please review on this stackoverflow problem: http://stackoverflow.com/questions/6249664/does-svg-support-embedding-of-bitmap-images
 
 Here is the svg image object that define in VisualBasic language:
 
