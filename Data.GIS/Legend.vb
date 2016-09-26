@@ -14,13 +14,13 @@ Public Module Legend
                 Dim size As Size = grect.Size
                 Dim margin As Size = grect.Margin
                 Dim grayHeight As Integer = size.Height * 0.05
-                Dim y As Integer
+                Dim y As Single
                 Dim font As New Font(FontFace.MicrosoftYaHei, 42)
                 Dim fSize As SizeF
                 Dim pt As Point
                 Dim rectWidth As Integer = 150
                 Dim legendsHeight As Integer = size.Height - (margin.Height * 3) - grayHeight * 3
-                Dim d As Integer = legendsHeight / designer.Depth
+                Dim d As Single = legendsHeight / designer.Depth
                 Dim left As Integer = margin.Width + 30 + rectWidth
 
                 Call g.DrawString(title, font, Brushes.Black, New Point(margin.Width, 0))
@@ -33,8 +33,8 @@ Public Module Legend
                 For i As Integer = designer.Depth - 1 To 0 Step -1
                     Call g.FillRectangle(
                         New SolidBrush(designer.Colors(i)),
-                        New Rectangle(New Point(margin.Width, y),
-                                      New Size(rectWidth, d)))
+                        New RectangleF(New PointF(margin.Width, y),
+                                      New SizeF(rectWidth, d)))
                     y += d
                 Next
 
@@ -43,13 +43,13 @@ Public Module Legend
                     Math.Round(designer.raw.Min, 1),
                     font,
                     Brushes.Black,
-                    New Point(left, d + y - fSize.Height))
+                    New Point(left, If(designer.Depth > 100, d, 0) + y - fSize.Height))
 
                 y = size.Height - margin.Height - grayHeight
                 fSize = g.MeasureString("Unknown", font)
                 pt = New Point(
                     left,
-                    y - (fSize.Height - grayHeight) / 2)
+                    y - (grayHeight - fSize.Height) / 2)
                 Call g.FillRectangle(
                     Brushes.LightGray,
                     New Rectangle(New Point(margin.Width, y),
