@@ -77,16 +77,16 @@ Public Class ColorDesigner
     End Sub
 
     Public Function GetColor(x As Double) As Color
-        Return GetColor(mappings(x))
+        Return GetColor(mappings(x), raw:=x)
     End Function
 
-    Public Function GetColor(x As Integer) As Color
+    Public Function GetColor(x As Integer, Optional raw As Double = -100) As Color
         Try
             Return Colors(x - 1)
         Catch ex As Exception
-            ex = New Exception($"Depth:={Depth}, x:={x}, level:={mappings(x) - 1}", ex)
+            ex = New Exception($"Depth:={Depth}, x:={raw}, level:={x - 1}", ex)
             Call App.LogException(ex)
-            Return Colors(If(mappings(x) = 0, 0, Depth - 1))
+            Return Colors(If(x = 0, 0, Depth - 1))
         End Try
     End Function
 End Class

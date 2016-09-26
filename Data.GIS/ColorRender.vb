@@ -49,6 +49,8 @@ Public Module ColorRender
                             Function(x) x.alpha2)
     End Sub
 
+    Const Russian As String = "Russian Federation"
+
     ''' <summary>
     ''' 
     ''' </summary>
@@ -70,25 +72,27 @@ Public Module ColorRender
             mapTemplate))
         Dim designer As New ColorDesigner(data, mapName, mapLevels)
 
-        'Call renderedMap.Reset(Color.LightGray)
+        Call renderedMap.Reset(Color.LightGray)
 
-        'For Each state As Data In designer.data
-        '    Dim c As node = renderedMap.__country(state.state)
+        For Each state As Data In designer.data
+            Dim c As node = renderedMap.__country(state.state)
 
-        '    If c Is Nothing Then
-        '        Continue For
-        '    End If
+            If c Is Nothing Then
+                Continue For
+            End If
 
-        '    Dim mapsColor As Color = designer.GetColor(state.value)
-        '    Dim color As Color = If(
-        '        String.IsNullOrEmpty(state.color),
-        '        mapsColor,
-        '        state.color.ToColor(
-        '        onFailure:=mapsColor))
-        '    Call c.FillColor(color.RGBExpression)
-        'Next
+            Dim mapsColor As Color = designer.GetColor(state.value)
+            Dim color As Color = If(
+                String.IsNullOrEmpty(state.color),
+                mapsColor,
+                state.color.ToColor(
+                onFailure:=mapsColor))
+            Call c.FillColor(color.RGBExpression)
+        Next
 
-        Call renderedMap.CSSRender(designer)
+        ' Call renderedMap.CSSRender(designer)
+        ' 2016-9-26, bugs fixed when removes the transform for russian country, not sure why this happened???
+        DirectCast(renderedMap.__country(Russian), g).transform = Nothing
 
         legend = designer.DrawLegend(title)
         renderedMap.images = {    ' 将所生成legend图片镶嵌进入SVG矢量图之中
