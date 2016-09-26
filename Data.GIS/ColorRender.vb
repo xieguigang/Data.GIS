@@ -117,14 +117,19 @@ Public Module ColorRender
         Dim css As New StringBuilder(map.style.style)
 
         For Each level In stateLevels
+            Dim value As Color = designer.GetColor(level.Key)
             Dim color As String =
-                ColorTranslator.ToHtml(designer.GetColor(level.Key))
+                ColorTranslator.ToHtml(value)
             Dim attrs As New Dictionary(Of String, String) From {
                 {
-                    "fill", color
+                    "fill", LCase(color)
                 }
             }
-            Dim fill As String = XmlMeta.CSS.Generator(level.Value, attrs)
+            Dim fill As String = XmlMeta.CSS.Generator(
+                level.Value _
+                    .Select(AddressOf alpha2) _
+                    .Select(AddressOf LCase),
+                attrs)
 
             Call css.AppendLine(fill)
         Next
@@ -160,6 +165,12 @@ Public Module ColorRender
         End If
     End Sub
 
+    Public Function alpha2(term As String) As String
+        Return If(statDict.ContainsKey(term),
+            statDict(term),
+            statDict.TryGetValue(term.ToLower))
+    End Function
+
     ''' <summary>
     ''' thanks to the XML/HTML style of the SVG (and Nathan’s explanation) I can create CSS classes per country 
     ''' (the polygons of each country uses the alpha-2 country code as a class id)
@@ -169,10 +180,7 @@ Public Module ColorRender
     ''' <returns></returns>
     <Extension>
     Private Function __country(map As SVGXml, code As String) As node
-        Dim alpha2 As String =
-            If(statDict.ContainsKey(code),
-            statDict(code),
-            statDict.TryGetValue(code.ToLower))
+        Dim alpha2 As String = ColorRender.alpha2(term:=code)
         Dim c As node = map.gs.__country(alpha2)
 
         If c Is Nothing Then

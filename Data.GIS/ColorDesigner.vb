@@ -63,10 +63,7 @@ Public Class ColorDesigner
         Dim trim As New List(Of Data)
 
         For Each x As Data In Me.data
-            Dim alpha2 As String =
-                If(statDict.ContainsKey(x.state),
-                statDict(x.state),
-                statDict.TryGetValue(x.state.ToLower))
+            Dim alpha2 As String = ColorRender.alpha2(x.state)
 
             If alpha2 Is Nothing Then
                 Call $"Unable found Object named '{x.GetJson}'!".PrintException
