@@ -12,10 +12,14 @@ Imports Microsoft.VisualBasic.SoftwareToolkits
 Public Class ColorDesigner
 
     Public Colors As Color()
+
+    ''' <summary>
+    ''' 筛除掉了一些无法查找到对象的数据点
+    ''' </summary>
     Public data As Data()
     Public raw As Double()
 
-    Dim mappings As Dictionary(Of Double, Integer)
+    Public mappings As Dictionary(Of Double, Integer)
 
     Public ReadOnly Property Depth As Integer
         Get
@@ -58,7 +62,7 @@ Public Class ColorDesigner
 
         Dim trim As New List(Of Data)
 
-        For Each x In Me.data
+        For Each x As Data In Me.data
             Dim alpha2 As String =
                 If(statDict.ContainsKey(x.state),
                 statDict(x.state),
@@ -76,8 +80,12 @@ Public Class ColorDesigner
     End Sub
 
     Public Function GetColor(x As Double) As Color
+        Return GetColor(mappings(x))
+    End Function
+
+    Public Function GetColor(x As Integer) As Color
         Try
-            Return Colors(mappings(x) - 1)
+            Return Colors(x - 1)
         Catch ex As Exception
             ex = New Exception($"Depth:={Depth}, x:={x}, level:={mappings(x) - 1}", ex)
             Call App.LogException(ex)

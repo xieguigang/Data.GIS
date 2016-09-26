@@ -1,11 +1,14 @@
 ﻿Imports System.Drawing
 Imports System.Runtime.CompilerServices
+Imports System.Text
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.Mathematical
+Imports Microsoft.VisualBasic.MIME.Markup
+Imports Microsoft.VisualBasic.MIME.Markup.HTML
 Imports Microsoft.VisualBasic.SoftwareToolkits
 
 Public Module ColorRender
@@ -67,23 +70,25 @@ Public Module ColorRender
             mapTemplate))
         Dim designer As New ColorDesigner(data, mapName, mapLevels)
 
-        Call renderedMap.Reset(Color.LightGray)
+        'Call renderedMap.Reset(Color.LightGray)
 
-        For Each state As Data In designer.data
-            Dim c As node = renderedMap.__country(state.state)
+        'For Each state As Data In designer.data
+        '    Dim c As node = renderedMap.__country(state.state)
 
-            If c Is Nothing Then
-                Continue For
-            End If
+        '    If c Is Nothing Then
+        '        Continue For
+        '    End If
 
-            Dim mapsColor As Color = designer.GetColor(state.value)
-            Dim color As Color = If(
-                String.IsNullOrEmpty(state.color),
-                mapsColor,
-                state.color.ToColor(
-                onFailure:=mapsColor))
-            Call c.FillColor(color.RGBExpression)
-        Next
+        '    Dim mapsColor As Color = designer.GetColor(state.value)
+        '    Dim color As Color = If(
+        '        String.IsNullOrEmpty(state.color),
+        '        mapsColor,
+        '        state.color.ToColor(
+        '        onFailure:=mapsColor))
+        '    Call c.FillColor(color.RGBExpression)
+        'Next
+
+        Call renderedMap.CSSRender(designer)
 
         legend = designer.DrawLegend(title)
         renderedMap.images = {    ' 将所生成legend图片镶嵌进入SVG矢量图之中
@@ -97,6 +102,35 @@ Public Module ColorRender
 
         Return renderedMap
     End Function
+
+    <Extension>
+    Public Sub CSSRender(ByRef map As SVGXml, designer As ColorDesigner)
+        Dim stateLevels = (From stat As Data
+                           In designer.data
+                           Where String.IsNullOrEmpty(stat.color)
+                           Select stat.state,
+                              lv = designer.mappings(stat.value)
+                           Group By lv Into Group).ToDictionary(
+                                Function(x) x.lv,
+                                Function(x) x.Group.ToArray(
+                                Function(c) c.state))
+        Dim css As New StringBuilder(map.style.style)
+
+        For Each level In stateLevels
+            Dim color As String =
+                ColorTranslator.ToHtml(designer.GetColor(level.Key))
+            Dim attrs As New Dictionary(Of String, String) From {
+                {
+                    "fill", color
+                }
+            }
+            Dim fill As String = XmlMeta.CSS.Generator(level.Value, attrs)
+
+            Call css.AppendLine(fill)
+        Next
+
+        map.style.style = css.ToString
+    End Sub
 
     <Extension>
     Public Sub Reset(ByRef svg As SVGXml, baseColor As Color)
