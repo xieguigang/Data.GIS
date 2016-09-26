@@ -343,7 +343,7 @@ Public Class Image
 End Class
 ```
 
-And after the legend image was output from the ``DrawLegend`` function, that we can creates a svg image object and put on the specific position on the svg Image by calculated the x and y position value.
+And after the legend image was output from the ``DrawLegend`` function, that we can creates a svg image object and put on the specific position on the svg Image by calculating the ``x`` and ``y`` position value.
 
 ```vbnet
 legend = designer.DrawLegend(title)
@@ -359,7 +359,7 @@ renderedMap.images = {                  ' 将所生成legend图片镶嵌进入SV
 
 ## Example
 
-A demo CLI tools for this rendering tool can be found in the attachments.
+A demo CLI tools for this map color rendering module can be found in the attachments.
 
 ##### CLI tool
 
@@ -415,3 +415,9 @@ GIS_render /Rendering /in <data.csv> [/main <title> /legend.title <legend title>
 
 ###### Test rendering with ``/map.levels = 20; /map.Name = Jet``
 ![](./API_SP.DYN.LE00.MA.IN_DS2.rendering;levels=20,map.Name=Jet.png)
+
+### Test On Linux
+
+The example CLI tools have been test successful on Ubuntu system:
+
+![](./ubuntu_test.png)
