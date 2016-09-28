@@ -412,6 +412,13 @@ GIS_render /Rendering /in <data.csv> [/main <title> /legend.title <legend title>
 
 ``API_SP.DYN.LE00.MA.IN_DS2_en_csv_v2`` data was download from worldbank: http://data.worldbank.org/indicator/SP.DYN.LE00.MA.IN using year 2012 as ``Data.value``
 
+```bash
+#!/bin/bash
+
+../GIS_render.exe /rendering /in ./API_SP.DYN.LE00.MA.IN_DS2.csv /map.name Summer /map.levels 512
+../GIS_render.exe /rendering /in ./API_SP.DYN.LE00.MA.IN_DS2.csv /map.name Jet /map.levels 20
+```
+
 ###### Test rendering with ``/map.levels = 512; /map.Name = Summer``
 ![](./API_SP.DYN.LE00.MA.IN_DS2.rendering;levels=512,map.Name=summer.png)
 
