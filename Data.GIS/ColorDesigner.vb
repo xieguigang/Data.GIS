@@ -42,7 +42,7 @@ Public Class ColorDesigner
         If Not String.IsNullOrEmpty(mapName) AndAlso
             Not mapName.TextEquals("default") Then
             Dim maps As New ColorMap(mapLevels)
-            Colors = ColorSequence(maps.GetMaps(mapName), maps)
+            Colors = ColorSequence(maps, mapName)
         Else
             If mapLevels = 512 Then
                 Colors = MapDefaultColors.DefaultColors512

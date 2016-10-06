@@ -9,7 +9,7 @@ Public Module Legend
     Public Function DrawLegend(designer As ColorDesigner, title As String, Optional bg As String = "transparent") As Bitmap
         Return GraphicsPlots(
             New Size(800, 1000), New Size(50, 50), bg,
-            Sub(g, grect)
+            Sub(ByRef g, grect)
                 Dim graphicsRegion As Rectangle = grect.GraphicsRegion
                 Dim size As Size = grect.Size
                 Dim margin As Size = grect.Margin
