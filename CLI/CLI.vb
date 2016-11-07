@@ -18,15 +18,17 @@ Public Module CLI
 
     <ExportAPI("/Rendering",
                Usage:="/Rendering /in <data.csv> [/main <title> /legend.title <legend title> /map.levels <512> /map <map.svg> /iso_3166 <iso_3166.csv> /map.Name <default> /out <out.svg>]")>
-    <ParameterInfo("/in", False,
-                   AcceptTypes:={GetType(Data)},
-                   Description:="A data file template example can be found in the ./Templates/ folder.")>
-    <ParameterInfo("/map.levels", True, AcceptTypes:={GetType(Integer)},
-                   Description:="Any positive integer value, this will adjust the color depth for the value mappings.")>
-    <ParameterInfo("/map", True,
-                   Description:="User custom map svg, please note that the id attribute of the ``g`` or ``path`` object in the svg stands for the country for region should be the iso-3166-1 alpha2 code.")>
-    <ParameterInfo("/map.Name", True, AcceptTypes:={GetType(String)},
-                   Description:="The color map pattern profile name, the VisualBasic language build in color patterns name can be found at github: https://github.com/xieguigang/VisualBasic_AppFramework/tree/master/gr
+    <Argument("/in", False,
+              AcceptTypes:={GetType(Data)},
+              Description:="A data file template example can be found in the ./Templates/ folder.")>
+    <Argument("/map.levels", True,
+              AcceptTypes:={GetType(Integer)},
+              Description:="Any positive integer value, this will adjust the color depth for the value mappings.")>
+    <Argument("/map", True,
+              Description:="User custom map svg, please note that the id attribute of the ``g`` or ``path`` object in the svg stands for the country for region should be the iso-3166-1 alpha2 code.")>
+    <Argument("/map.Name", True,
+              AcceptTypes:={GetType(String)},
+              Description:="The color map pattern profile name, the VisualBasic language build in color patterns name can be found at github: https://github.com/xieguigang/sciBASIC/tree/master/gr
                    And this value is set as ``default`` if this parameter is not specified, in this situation, the parameter value of /map.levels is only allowd 256 or 512.")>
     Public Function Rendering(args As CommandLine) As Integer
         Dim [in] As String = args("/in")
@@ -52,9 +54,11 @@ Public Module CLI
             mapName:=mapName,
             legend:=legend,
             title:=legendTitle)
+
         If Not String.IsNullOrEmpty(main) Then
             svg.title = main
         End If
+
         Return svg.SaveAsXml(out).CLICode
     End Function
 End Module

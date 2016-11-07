@@ -41,10 +41,12 @@ Public Module ColorRender
                          x.name.ToLower,
                          x.alpha2,
                          x.alpha3,
-                         x.code}.Select(Function(code) New With {
-                            .code = code,
-                            .alpha2 = x.alpha2
-                         })).MatrixAsIterator.ToDictionary(
+                         x.code
+                     }.Select(Function(code) New With {
+                         .code = code,
+                         .alpha2 = x.alpha2
+                         })).IteratesALL _
+                            .ToDictionary(
                             Function(x) x.code,
                             Function(x) x.alpha2)
     End Sub
