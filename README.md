@@ -1,4 +1,4 @@
-# Data.GIS 
+# Data.GIS
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.160130.svg)](https://doi.org/10.5281/zenodo.160130)
 
@@ -10,13 +10,13 @@ Data visualization for the information about and appraisal of an epidemic or hum
 
 ###### Developer Note
 
-For start the further development, install the Microsoft VisualBasic CLI runtime first:
+For start the further development, install ``sciBASIC#`` via nuget runtime first:
 
 ```bash
-PM> Install-Package VB_AppFramework
+PM> Install-Package sciBASIC -Pre
 ```
 
-and then add reference to the dll files:
+and then add reference to these dll files:
 
 + Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll
 + Microsoft.VisualBasic.Data.Csv.dll
