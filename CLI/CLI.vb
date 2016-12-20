@@ -39,7 +39,7 @@ Public Module CLI
         Dim main As String = args("/main")
         Dim out As String = args.GetValue(
             "/out",
-            [in].TrimSuffix & $".rendering;levels={levels},map.Name={mapName}.svg")
+            [in].TrimSuffix & $".rendering;levels={levels},map.Name={mapName.NormalizePathString}.svg")
         Dim data As IEnumerable(Of Data) = [in].LoadCsv(Of Data)
         Dim legend As Bitmap = Nothing
         Dim legendTitle As String = args.GetValue("/legend.title", "Legend title")

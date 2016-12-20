@@ -2,6 +2,7 @@
 Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Imaging
+Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
 Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
@@ -41,8 +42,7 @@ Public Class ColorDesigner
 
         If Not String.IsNullOrEmpty(mapName) AndAlso
             Not mapName.TextEquals("default") Then
-            Dim maps As New ColorMap(mapLevels)
-            Colors = ColorSequence(maps, mapName)
+            Colors = Designer.GetColors(mapName, mapLevels)
         Else
             If mapLevels = 512 Then
                 Colors = MapDefaultColors.DefaultColors512
