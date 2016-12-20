@@ -56,7 +56,7 @@ Public Class ColorDesigner
         Me.mappings = values.GenerateMapping(mapLevels / 2) _
             .SeqIterator _
             .ToDictionary(Function(x) values(x.i),
-                          Function(x) x.obj)
+                          Function(x) x.value)
         Me.data = array
         Me.raw = array.ToArray(Function(x) x.value)
 
