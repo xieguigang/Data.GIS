@@ -12,7 +12,7 @@ Public Class Region
         Return Me.GetJson
     End Function
 
-    Public Shared Function LoadData() As Region()
+    Public Shared Function LoadData(Optional stripSuffix As Boolean = False) As Region()
         Dim text$ = My.Resources.cn
         Dim lines$() = text _
             .lTokens _
@@ -25,7 +25,8 @@ Public Class Region
         Dim code_header$() = {"", ""}
 
         For Each line As String In lines
-            Dim t As String() = line _
+            Dim t As String() =
+                If(stripSuffix, __stripSuffix(line), line) _
                 .StringSplit("\s+") _
                 .Where(Function(s) Not s.IsBlank) _
                 .ToArray
@@ -62,5 +63,13 @@ Public Class Region
         Next
 
         Return out
+    End Function
+
+    Private Shared Function __stripSuffix(s$) As String
+        s = s.Replace("自治区", "")
+        s = s.Replace("自治县", "")
+        s = s.Replace("特别行政区", "")
+        s = s.TrimEnd("市", "县", "区", "省")
+        Return Trim(s)
     End Function
 End Class
