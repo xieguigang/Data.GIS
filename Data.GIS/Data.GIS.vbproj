@@ -45,24 +45,25 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a, Version=3.0.32.37600, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a, Version=3.0.32.8452, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sciBASIC.2.1.5-beta\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</HintPath>
+      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic.Data.Csv, Version=1.0.6158.37601, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.VisualBasic.Data.Csv, Version=1.0.6193.8453, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sciBASIC.2.1.5-beta\Microsoft.VisualBasic.Data.Csv.dll</HintPath>
+      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Data.Csv.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic.Imaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sciBASIC.2.1.5-beta\Microsoft.VisualBasic.Imaging.dll</HintPath>
+      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Imaging.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic.Mathematical">
-      <HintPath>..\packages\sciBASIC.2.1.5-beta\Microsoft.VisualBasic.Mathematical.dll</HintPath>
+    <Reference Include="Microsoft.VisualBasic.Mathematical, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Mathematical.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualBasic.MIME.Markup, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sciBASIC.2.1.5-beta\Microsoft.VisualBasic.MIME.Markup.dll</HintPath>
+      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.MIME.Markup.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

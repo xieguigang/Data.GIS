@@ -1,41 +1,35 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3C61A45D-6914-448E-B8C8-8953ACD1994A}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <StartupObject>GIS_render.Program</StartupObject>
-    <RootNamespace>GIS_render</RootNamespace>
-    <AssemblyName>GIS_render</AssemblyName>
+    <ProjectGuid>{15559062-851F-4FD2-BEB4-E49745DF470F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Microsoft.VisualBasic.Data.GIS.CN</RootNamespace>
+    <AssemblyName>Microsoft.VisualBasic.Data.GIS.CN</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <MyType>Console</MyType>
+    <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>GIS_render.xml</DocumentationFile>
+    <DocumentationFile>Microsoft.VisualBasic.Data.GIS.CN.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>Full</DebugType>
+    <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>GIS_render.xml</DocumentationFile>
+    <DocumentationFile>Microsoft.VisualBasic.Data.GIS.CN.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -50,30 +44,15 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a, Version=3.0.32.8452, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a">
       <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Architecture.Framework_v3.0_22.0.76.201__8da45dcd8060cc9a.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.VisualBasic.Data.Csv, Version=1.0.6193.8453, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Microsoft.VisualBasic.Data.Csv">
       <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Data.Csv.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualBasic.Imaging, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Imaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualBasic.Mathematical, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.Mathematical.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.VisualBasic.MIME.Markup, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\sciBASIC.2.2.0\Microsoft.VisualBasic.MIME.Markup.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.Extensions" />
@@ -95,8 +74,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CLI.vb" />
-    <Compile Include="Program.vb" />
+    <Compile Include="Region.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -131,21 +109,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Data.GIS\Data.GIS.vbproj">
-      <Project>{4dab24a6-7960-422c-b7c7-38b97caa3b63}</Project>
-      <Name>Data.GIS</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
