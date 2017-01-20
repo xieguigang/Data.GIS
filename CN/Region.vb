@@ -12,6 +12,18 @@ Public Class Region
         Return Me.GetJson
     End Function
 
+    Public Function MatchRegion(text$) As Boolean
+        If InStr(text, Province) > 0 Then
+            Return True
+        ElseIf InStr(text, CityName) > 0 Then
+            Return True
+        ElseIf InStr(text, District) > 0 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
     Public Shared Function LoadData(Optional stripSuffix As Boolean = False) As Region()
         Dim text$ = My.Resources.cn
         Dim lines$() = text _
@@ -32,23 +44,38 @@ Public Class Region
                 .ToArray
             Dim code$ = t(Scan0)
             Dim h = code.Split(2)
-            Dim pcode = h(0) & h(1)
-            Dim ccode = h(2) & h(3)
+            Dim pcode As New String(h(0))
+            Dim ccode As New String(h(1))
             Dim region$ = t(1)
+            Dim createRegionData As Boolean = False
 
             If pcode <> code_header(0) Then
                 ' 变换了省份
                 prov = region
                 city = region
                 code_header = {pcode, ccode}
+                createRegionData = True
 
                 Continue For
             End If
 
             If ccode <> code_header(1) Then
-                ' 变换了市名称
-                city = region
                 code_header(1) = ccode
+
+                If createRegionData = True Then
+                    ' 变换了市名称
+                    city = region
+                    createRegionData = False
+                Else
+                    out += New Region With {
+                        .CityName = prov,
+                        .Province = prov,
+                        .District = region,
+                        .Code = code
+                    }
+
+                    city = region
+                End If
 
                 Continue For
             End If
@@ -66,6 +93,7 @@ Public Class Region
     End Function
 
     Private Shared Function __stripSuffix(s$) As String
+        s = s.StripBlank
         s = s.Replace("自治区", "")
         s = s.Replace("自治县", "")
         s = s.Replace("特别行政区", "")

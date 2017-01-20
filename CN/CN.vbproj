@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{15559062-851F-4FD2-BEB4-E49745DF470F}</ProjectGuid>
+    <ProjectGuid>{0D9F6D45-3D61-4CA6-A45A-D28AD5FF728C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Microsoft.VisualBasic.Data.GIS.CN</RootNamespace>
     <AssemblyName>Microsoft.VisualBasic.Data.GIS.CN</AssemblyName>
@@ -74,6 +74,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.vb" />
     <Compile Include="Region.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
