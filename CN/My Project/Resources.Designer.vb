@@ -59,5 +59,37 @@ Namespace My.Resources
                 resourceCulture = value
             End Set
         End Property
+        
+        '''<summary>
+        '''  Looks up a localized string similar to # 2016年11月中华人民共和国县以上行政区划代码		
+        '''行政区划代码	  单位名称						
+        '''110000	北京市						
+        '''110101	    东城区						
+        '''110102	    西城区						
+        '''110105	    朝阳区						
+        '''110106	    丰台区						
+        '''110107	    石景山区						
+        '''110108	    海淀区						
+        '''110109	    门头沟区						
+        '''110111	    房山区						
+        '''110112	    通州区						
+        '''110113	    顺义区						
+        '''110114	    昌平区						
+        '''110115	    大兴区						
+        '''110116	    怀柔区						
+        '''110117	    平谷区						
+        '''110118	    密云区						
+        '''110119	    延庆区						
+        '''120000	天津市						
+        '''120101	    和平区						
+        '''120102	    河东区						
+        '''120103	    河西区						
+        '''12010 [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property cn() As String
+            Get
+                Return ResourceManager.GetString("cn", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace
