@@ -1,0 +1,12 @@
+{
+  "name": "worldmap-render",
+  "version": "0.0.0",
+  "description": "worldmap-render",
+  "main": "app.js",
+  "author": {
+    "name": "Administrator"
+  },
+  "devDependencies": {
+    "@types/node": "^6.0.87"
+  }
+}
