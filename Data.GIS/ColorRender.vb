@@ -1,22 +1,21 @@
 ﻿Imports System.Drawing
 Imports System.Runtime.CompilerServices
 Imports System.Text
+Imports Microsoft.VisualBasic.ApplicationServices
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Imaging
-Imports Microsoft.VisualBasic.Imaging.SVG
+Imports Microsoft.VisualBasic.Imaging.SVG.XML
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Language.Default
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Mathematical
-Imports Microsoft.VisualBasic.MIME.Markup
 Imports Microsoft.VisualBasic.MIME.Markup.HTML
-Imports Microsoft.VisualBasic.SoftwareToolkits
 
 Public Module ColorRender
 
     ''' <summary>
     ''' <see cref="SVGXml"/>
     ''' </summary>
-    ReadOnly BlankMap_World6 As String
+    ReadOnly BlankMap_World6 As DefaultValue(Of String)
 
     Public ReadOnly Property statDict As Dictionary(Of String, String)
 
@@ -24,7 +23,7 @@ Public Module ColorRender
 
     Sub New()
         If App.IsMicrosoftPlatform Then
-            Dim res As New Resources(GetType(ColorRender))
+            Dim res As New ResourcesSatellite(GetType(ColorRender))
             Dim ISO_3166_1 As String = res.GetString(NameOf(ISO_3166_1))
 
             SetISO_3166(ImportsData(Of ISO_3166)(ISO_3166_1,))
@@ -68,10 +67,7 @@ Public Module ColorRender
                               Optional ByRef legend As Bitmap = Nothing,
                               Optional title As String = "Legend title") As SVGXml
 
-        Dim renderedMap As SVGXml = SVGXml.TryLoad(
-            If(String.IsNullOrEmpty(mapTemplate),
-            BlankMap_World6,
-            mapTemplate))
+        Dim renderedMap As SVGXml = SVGXml.TryLoad(mapTemplate Or BlankMap_World6)
         Dim designer As New ColorDesigner(data, mapName, mapLevels)
 
         Call renderedMap.Reset(Color.LightGray)
@@ -96,9 +92,10 @@ Public Module ColorRender
         ' 2016-9-26, bugs fixed when removes the transform for russian country, not sure why this happened???
         DirectCast(renderedMap.__country(Russian), g).transform = Nothing
 
-        legend = designer.DrawLegend(title)
-        renderedMap.images = {    ' 将所生成legend图片镶嵌进入SVG矢量图之中
-            New SVG.Image(legend) With {
+        legend = designer.DrawLegend(title).AsGDIImage
+        ' 将所生成legend图片镶嵌进入SVG矢量图之中
+        renderedMap.images = {
+            New SVG.XML.Image(legend) With {
                 .height = legend.Height * 0.5,
                 .width = legend.Width * 0.5,
                 .x = .width / 2,
@@ -118,9 +115,10 @@ Public Module ColorRender
                               lv = designer.mappings(stat.value)
                            Group By lv Into Group).ToDictionary(
                                 Function(x) x.lv,
-                                Function(x) x.Group.ToArray(
-                                Function(c) c.state))
-        Dim css As New StringBuilder(map.style.style)
+                                Function(x)
+                                    Return x.Group.Select(Function(c) c.state).ToArray
+                                End Function)
+        Dim css As New StringBuilder(map.style)
 
         For Each level In stateLevels
             Dim value As Color = designer.GetColor(level.Key)
@@ -140,14 +138,14 @@ Public Module ColorRender
             Call css.AppendLine(fill)
         Next
 
-        map.style.style = css.ToString
+        map.style = css.ToString
     End Sub
 
     <Extension>
     Public Sub Reset(ByRef svg As SVGXml, baseColor As Color)
         Dim color As String = baseColor.RGBExpression
 
-        For Each g As g In svg.gs.SafeQuery
+        For Each g As g In svg.Layers.SafeQuery
             Call g.FillColor(color)
         Next
         For Each path As path In svg.path.SafeQuery
@@ -161,7 +159,7 @@ Public Module ColorRender
         If TypeOf g Is g Then
             Dim x As g = DirectCast(g, g)
 
-            For Each [sub] As g In x.gs.SafeQuery
+            For Each [sub] As g In x.Layers.SafeQuery
                 Call [sub].FillColor(color)
             Next
 
@@ -187,7 +185,7 @@ Public Module ColorRender
     <Extension>
     Private Function __country(map As SVGXml, code As String) As node
         Dim alpha2 As String = ColorRender.alpha2(term:=code)
-        Dim c As node = map.gs.__country(alpha2)
+        Dim c As node = map.Layers.__country(alpha2)
 
         If c Is Nothing Then
             c = map.path.__country(alpha2)
@@ -219,12 +217,12 @@ Public Module ColorRender
             If alpha2.TextEquals(c.id) Then
                 Return c
             Else
-                If c.gs.IsNullOrEmpty Then
+                If c.Layers.IsNullOrEmpty Then
                     Continue For
                 End If
             End If
 
-            If Not (state = c.gs.__country(alpha2)) Is Nothing Then
+            If Not (state = c.Layers.__country(alpha2)) Is Nothing Then
                 Return state
             End If
 

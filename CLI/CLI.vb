@@ -1,13 +1,13 @@
 ﻿Imports System.Drawing
 Imports Microsoft.VisualBasic.CommandLine
+Imports Microsoft.VisualBasic.CommandLine.ManView
 Imports Microsoft.VisualBasic.CommandLine.Reflection
 Imports Microsoft.VisualBasic.Data.csv
 Imports Microsoft.VisualBasic.Data.GIS
-Imports Microsoft.VisualBasic.Imaging
-Imports Microsoft.VisualBasic.Imaging.SVG
+Imports Microsoft.VisualBasic.Imaging.SVG.XML
 Imports Microsoft.VisualBasic.Scripting.MetaData
 
-<PackageNamespace("GIS_rendering.Utilities.CLI",
+<Package("GIS_rendering.Utilities.CLI",
                   Description:="Data visualization for the information about and appraisal of an epidemic or human population genetics data associated with GIS data by using VisualBasic language hybrids with SVG/CSS.",
                   Category:=APICategories.CLI_MAN,
                   Publisher:="xie.guigang@gcmodeller.org")>

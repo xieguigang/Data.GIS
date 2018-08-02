@@ -1,5 +1,5 @@
-﻿Imports Microsoft.VisualBasic.Serialization.JSON
-Imports Microsoft.VisualBasic.Language
+﻿Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Serialization.JSON
 
 Public Class Region
 
@@ -27,8 +27,8 @@ Public Class Region
     Public Shared Function LoadData(Optional stripSuffix As Boolean = False) As Region()
         Dim text$ = My.Resources.cn
         Dim lines$() = text _
-            .lTokens _
-            .Where(Function(s) Not s.IsBlank AndAlso Not s.First = "#"c) _
+            .LineTokens _
+            .Where(Function(s) Not s.StringEmpty AndAlso Not s.First = "#"c) _
             .Skip(1) _
             .ToArray
 
@@ -40,7 +40,7 @@ Public Class Region
             Dim t As String() =
                 If(stripSuffix, __stripSuffix(line), line) _
                 .StringSplit("\s+") _
-                .Where(Function(s) Not s.IsBlank) _
+                .Where(Function(s) Not s.StringEmpty) _
                 .ToArray
             Dim code$ = t(Scan0)
             Dim h = code.Split(2)

@@ -1,14 +1,9 @@
 ﻿Imports System.Drawing
-Imports System.Runtime.CompilerServices
-Imports Microsoft.VisualBasic.Data.csv
-Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D.Colors
-Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.Linq
-Imports Microsoft.VisualBasic.Mathematical
+Imports Microsoft.VisualBasic.Math
 Imports Microsoft.VisualBasic.Serialization.JSON
-Imports Microsoft.VisualBasic.SoftwareToolkits
 
 Public Class ColorDesigner
 
@@ -58,7 +53,7 @@ Public Class ColorDesigner
             .ToDictionary(Function(x) values(x.i),
                           Function(x) x.value)
         Me.data = array
-        Me.raw = array.ToArray(Function(x) x.value)
+        Me.raw = array.Select(Function(x) x.value).ToArray
 
         Dim trim As New List(Of Data)
 
