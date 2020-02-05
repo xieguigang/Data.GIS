@@ -1,7 +1,10 @@
-﻿Imports Microsoft.VisualBasic.Data.GIS.GeoMap.geojson
+﻿Imports System.Drawing
+Imports Microsoft.VisualBasic.Data.GIS.GeoMap.geojson
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Driver
+Imports Microsoft.VisualBasic.Imaging.SVG
+Imports Microsoft.VisualBasic.Language
 Imports Microsoft.VisualBasic.MIME.application
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -13,11 +16,36 @@ Namespace GeoMap
     ''' </summary>
     Public Class GeoMapRender
 
+        Dim features As Feature()
+
         Private Sub New()
         End Sub
 
         Public Sub Plot(ByRef g As IGraphics, layout As GraphicsRegion)
+            Dim svg As GraphicsSVG = DirectCast(g, GraphicsSVG)
+            Dim id$
+            Dim name$
+            Dim guid As i32 = 1000000
+            Dim geo As Double()()()()
+            Dim polygon As PointF()
 
+            For Each area As Feature In features
+                id = area.properties.TryGetValue("id", [default]:=++guid)
+                name = area.properties.TryGetValue("name", [default]:=id)
+                geo = area.geometry.coordinates
+
+                For Each a In geo
+                    For Each b In a
+                        polygon = b _
+                            .Select(Function(t)
+                                        Return New PointF(t(Scan0), t(1))
+                                    End Function) _
+                            .ToArray
+
+                        svg.FillPolygon(Brushes.Black, polygon)
+                    Next
+                Next
+            Next
         End Sub
 
         Public Shared Function Render(geo As String) As SVGData
@@ -34,7 +62,7 @@ Namespace GeoMap
                 size:=size.SizeParser,
                 padding:=g.ZeroPadding,
                 bg:="white",
-                plotAPI:=AddressOf New GeoMapRender().Plot,
+                plotAPI:=AddressOf New GeoMapRender() With {.features = geo.features}.Plot,
                 driver:=Drivers.SVG
             )
         End Function
