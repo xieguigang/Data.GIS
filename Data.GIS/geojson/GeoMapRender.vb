@@ -1,4 +1,5 @@
 ﻿Imports System.Drawing
+Imports Microsoft.VisualBasic.ComponentModel.Ranges.Model
 Imports Microsoft.VisualBasic.Data.GIS.GeoMap.geojson
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
@@ -17,8 +18,39 @@ Namespace GeoMap
     Public Class GeoMapRender
 
         Dim features As Feature()
+        Dim scaleW As Func(Of Double, Double)
+        Dim scaleH As Func(Of Double, Double)
 
         Private Sub New()
+        End Sub
+
+        Private Sub doInitial(canvas As SizeF)
+            Dim x As DoubleRange = {0, 0}
+            Dim y As DoubleRange = {0, 0}
+            Dim width As DoubleRange = {0.0, canvas.Width}
+            Dim height As DoubleRange = {0.0, canvas.Height}
+
+            For Each area As Feature In features
+                For Each a In area.geometry.coordinates
+                    For Each b In a
+                        For Each c As Double() In b
+                            If x.Min > c(0) Then
+                                x.Min = c(0)
+                            ElseIf x.Max < c(0) Then
+                                x.Max = c(0)
+                            End If
+                            If y.Min > c(1) Then
+                                y.Min = c(1)
+                            ElseIf y.Max < c(1) Then
+                                y.Max = c(1)
+                            End If
+                        Next
+                    Next
+                Next
+            Next
+
+            scaleW = Function(xi) x.ScaleMapping(xi, width)
+            scaleH = Function(yi) y.ScaleMapping(yi, height)
         End Sub
 
         Public Sub Plot(ByRef g As IGraphics, layout As GraphicsRegion)
@@ -29,6 +61,8 @@ Namespace GeoMap
             Dim geo As Double()()()()
             Dim polygon As PointF()
 
+            Call doInitial(canvas:=layout.PlotRegion.Size)
+
             For Each area As Feature In features
                 id = area.properties.TryGetValue("id", [default]:=++guid)
                 name = area.properties.TryGetValue("name", [default]:=id)
@@ -38,7 +72,7 @@ Namespace GeoMap
                     For Each b In a
                         polygon = b _
                             .Select(Function(t)
-                                        Return New PointF(t(Scan0), t(1))
+                                        Return New PointF(scaleW(t(Scan0)), scaleH(t(1)))
                                     End Function) _
                             .ToArray
 
@@ -66,5 +100,7 @@ Namespace GeoMap
                 driver:=Drivers.SVG
             )
         End Function
+
+
     End Class
 End Namespace
