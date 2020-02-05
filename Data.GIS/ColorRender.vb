@@ -15,7 +15,7 @@ Public Module ColorRender
     ''' <summary>
     ''' <see cref="SVGXml"/>
     ''' </summary>
-    ReadOnly BlankMap_World6 As DefaultValue(Of String)
+    ReadOnly BlankMap_World6 As [Default](Of String)
 
     Public ReadOnly Property statDict As Dictionary(Of String, String)
 
@@ -73,7 +73,7 @@ Public Module ColorRender
         Call renderedMap.Reset(Color.LightGray)
 
         For Each state As Data In designer.data
-            Dim c As node = renderedMap.__country(state.state)
+            Dim c As SVG.XML.node = renderedMap.__country(state.state)
 
             If c Is Nothing Then
                 Continue For
@@ -153,7 +153,7 @@ Public Module ColorRender
         Next
     End Sub
 
-    <Extension> Public Sub FillColor(ByRef g As node, color As String)
+    <Extension> Public Sub FillColor(ByRef g As SVG.XML.node, color As String)
         g.style = $"fill: {color};"  ' path/g
 
         If TypeOf g Is g Then
@@ -183,9 +183,9 @@ Public Module ColorRender
     ''' <param name="code"></param>
     ''' <returns></returns>
     <Extension>
-    Private Function __country(map As SVGXml, code As String) As node
+    Private Function __country(map As SVGXml, code As String) As SVG.XML.node
         Dim alpha2 As String = ColorRender.alpha2(term:=code)
-        Dim c As node = map.Layers.__country(alpha2)
+        Dim c As SVG.XML.node = map.Layers.__country(alpha2)
 
         If c Is Nothing Then
             c = map.path.__country(alpha2)
@@ -210,8 +210,8 @@ Public Module ColorRender
     End Function
 
     <Extension>
-    Private Function __country(subs As g(), alpha2 As String) As node
-        Dim state As New Value(Of node)
+    Private Function __country(subs As g(), alpha2 As String) As SVG.XML.node
+        Dim state As New Value(Of SVG.XML.node)
 
         For Each c As g In subs
             If alpha2.TextEquals(c.id) Then
