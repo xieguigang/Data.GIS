@@ -10,6 +10,7 @@ Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.Runtime
+Imports SVGLayer = Microsoft.VisualBasic.Imaging.SVG.XML.g
 
 Namespace GeoMap
 
@@ -50,8 +51,8 @@ Namespace GeoMap
                 Next
             Next
 
-            scaleW = Function(xi) x.ScaleMapping(xi, width)
-            scaleH = Function(yi) y.ScaleMapping(yi, height)
+            scaleW = Function(xi) x.ScaleMapping(xi - x.Min, width)
+            scaleH = Function(yi) height.Max - y.ScaleMapping(yi - y.Min, height)
         End Sub
 
         Public Sub Plot(ByRef g As IGraphics, layout As GraphicsRegion)
@@ -61,6 +62,7 @@ Namespace GeoMap
             Dim guid As i32 = 1000000
             Dim geo As Double()()()()
             Dim polygon As PointF()
+            Dim layers As New List(Of SVGLayer)
 
             Call doInitial(canvas:=layout.PlotRegion.Size)
 
@@ -68,6 +70,7 @@ Namespace GeoMap
                 id = area.properties.TryGetValue("id", [default]:=++guid)
                 name = area.properties.TryGetValue("name", [default]:=id)
                 geo = area.geometry.coordinates
+                layers *= 0
 
                 For Each a In geo
                     For Each b In a
@@ -76,10 +79,24 @@ Namespace GeoMap
                                         Return New PointF(scaleW(t(Scan0)), scaleH(t(1)))
                                     End Function) _
                             .ToArray
-
                         svg.FillPolygon(Brushes.Black, polygon)
+                        layers += svg.GetLastLayer
                     Next
                 Next
+
+                ' add id and name title
+                If layers = 1 Then
+                    ' only one polygon
+                    With layers(Scan0)
+                        .id = id
+                        .title = name
+                    End With
+                Else
+                    For Each layer In layers.SeqIterator
+                        layer.value.id = $"{id}_{layer.i + 1}"
+                        layer.value.title = name
+                    Next
+                End If
             Next
         End Sub
 

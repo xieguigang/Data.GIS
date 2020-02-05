@@ -23,7 +23,7 @@ Module geojsonReader
     End Sub
 
     Sub renderMapOfChina()
-        Call GeoMapRender.RenderFolder("E:\Data.GIS\geojson-map-china\geometryCouties").Save("./map.svg")
+        Call GeoMapRender.RenderFolder("E:\Data.GIS\geojson-map-china\geometryCouties", "2560,1440").Save("./map.svg")
     End Sub
 
 
