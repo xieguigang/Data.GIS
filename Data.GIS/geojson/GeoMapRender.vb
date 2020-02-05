@@ -6,6 +6,7 @@ Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Driver
 Imports Microsoft.VisualBasic.Imaging.SVG
 Imports Microsoft.VisualBasic.Language
+Imports Microsoft.VisualBasic.Linq
 Imports Microsoft.VisualBasic.MIME.application
 Imports Microsoft.VisualBasic.MIME.application.json
 Imports Microsoft.VisualBasic.Scripting.Runtime
@@ -101,6 +102,16 @@ Namespace GeoMap
             )
         End Function
 
+        Public Shared Function RenderFolder(geometry$, Optional size$ = "5000,3000") As SVGData
+            Dim features = geometry.EnumerateFiles("*.json") _
+                .Select(Function(path) As FeatureCollection
+                            Return json.ParseJson(path.ReadAllText).CreateObject(GetType(FeatureCollection))
+                        End Function) _
+                .Select(Function(collect) collect.AsEnumerable) _
+                .IteratesALL _
+                .ToArray
 
+            Return Render(New FeatureCollection With {.features = features}, size)
+        End Function
     End Class
 End Namespace

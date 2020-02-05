@@ -6,6 +6,7 @@ Imports Microsoft.VisualBasic.MIME.application.json
 Module geojsonReader
 
     Sub Main()
+        Call renderMapOfChina()
         Call renderSVG("E:\Data.GIS\geojson-map-china\geometryCouties\140300.json")
 
         Pause()
@@ -20,5 +21,10 @@ Module geojsonReader
     Sub renderSVG(file$)
         Call GeoMapRender.Render("E:\Data.GIS\geojson-map-china\geometryCouties\140300.json").Save("./test.svg")
     End Sub
+
+    Sub renderMapOfChina()
+        Call GeoMapRender.RenderFolder("E:\Data.GIS\geojson-map-china\geometryCouties").Save("./map.svg")
+    End Sub
+
 
 End Module
