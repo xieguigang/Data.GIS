@@ -33,22 +33,29 @@ Namespace GeoMap
             Dim height As DoubleRange = {0.0, canvas.Height}
 
             For Each area As Feature In features
-                For Each a In area.geometry.coordinates
-                    For Each b In a
-                        For Each c As Double() In b
-                            If x.Min > c(0) Then
-                                x.Min = c(0)
-                            ElseIf x.Max < c(0) Then
-                                x.Max = c(0)
-                            End If
-                            If y.Min > c(1) Then
-                                y.Min = c(1)
-                            ElseIf y.Max < c(1) Then
-                                y.Max = c(1)
-                            End If
+                Dim geometry As PolygonVariant = area.geometry
+
+                Select Case geometry.jsonValue.GetType
+                    Case GetType(MultiPolygon)
+                        For Each a In DirectCast(geometry.jsonValue, MultiPolygon).coordinates
+                            For Each b In a
+                                For Each c As Double() In b
+                                    If x.Min > c(0) Then
+                                        x.Min = c(0)
+                                    ElseIf x.Max < c(0) Then
+                                        x.Max = c(0)
+                                    End If
+                                    If y.Min > c(1) Then
+                                        y.Min = c(1)
+                                    ElseIf y.Max < c(1) Then
+                                        y.Max = c(1)
+                                    End If
+                                Next
+                            Next
                         Next
-                    Next
-                Next
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
             Next
 
             scaleW = Function(xi) x.ScaleMapping(xi - x.Min, width)
@@ -60,29 +67,37 @@ Namespace GeoMap
             Dim id$
             Dim name$
             Dim guid As i32 = 1000000
-            Dim geo As Double()()()()
             Dim polygon As PointF()
             Dim layers As New List(Of SVGLayer)
+            Dim geometry As PolygonVariant
 
             Call doInitial(canvas:=layout.PlotRegion.Size)
 
             For Each area As Feature In features
                 id = area.properties.TryGetValue("id", [default]:=++guid)
                 name = area.properties.TryGetValue("name", [default]:=id)
-                geo = area.geometry.coordinates
                 layers *= 0
 
-                For Each a In geo
-                    For Each b In a
-                        polygon = b _
-                            .Select(Function(t)
-                                        Return New PointF(scaleW(t(Scan0)), scaleH(t(1)))
-                                    End Function) _
-                            .ToArray
-                        svg.FillPolygon(Brushes.Black, polygon)
-                        layers += svg.GetLastLayer
-                    Next
-                Next
+                geometry = area.geometry
+
+                Select Case geometry.jsonValue.GetType
+                    Case GetType(MultiPolygon)
+                        Dim geo = DirectCast(geometry.jsonValue, MultiPolygon).coordinates
+
+                        For Each a In geo
+                            For Each b In a
+                                polygon = b _
+                                    .Select(Function(t)
+                                                Return New PointF(scaleW(t(Scan0)), scaleH(t(1)))
+                                            End Function) _
+                                    .ToArray
+                                svg.FillPolygon(Brushes.Black, polygon)
+                                layers += svg.GetLastLayer
+                            Next
+                        Next
+                    Case Else
+                        Throw New NotImplementedException
+                End Select
 
                 ' add id and name title
                 If layers = 1 Then
