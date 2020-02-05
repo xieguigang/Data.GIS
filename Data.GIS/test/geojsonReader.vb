@@ -1,4 +1,4 @@
-﻿Imports Microsoft.VisualBasic.Data.GIS.geojson
+﻿Imports Microsoft.VisualBasic.Data.GIS.GeoMap.geojson
 Imports Microsoft.VisualBasic.MIME.application
 Imports Microsoft.VisualBasic.MIME.application.json
 

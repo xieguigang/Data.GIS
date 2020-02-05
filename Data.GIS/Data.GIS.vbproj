@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ColorDesigner.vb" />
+    <Compile Include="geojson\GeoMapRender.vb" />
     <Compile Include="geojson\node.vb" />
     <Compile Include="MapDefaultColors.vb" />
     <Compile Include="Data.vb" />

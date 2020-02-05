@@ -1,4 +1,4 @@
-﻿Namespace geojson
+﻿Namespace GeoMap.geojson
 
     ''' <summary>
     ''' A json node
@@ -11,7 +11,7 @@
 
     Public Class FeatureCollection : Inherits node
 
-        Public Property features As feature()
+        Public Property features As Feature()
 
     End Class
 
