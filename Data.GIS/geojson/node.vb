@@ -24,7 +24,7 @@
 
     Public Class MultiPolygon : Inherits node
 
-        Public Property coordinates As Double()()()()()
+        Public Property coordinates As Double()()()()
 
     End Class
 End Namespace
