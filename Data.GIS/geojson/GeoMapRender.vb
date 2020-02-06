@@ -31,31 +31,34 @@ Namespace GeoMap
             Dim y As DoubleRange = {0, 0}
             Dim width As DoubleRange = {0.0, canvas.Width}
             Dim height As DoubleRange = {0.0, canvas.Height}
+            Dim geo As Double()()()()
 
             For Each area As Feature In features
                 Dim geometry As PolygonVariant = area.geometry
 
                 Select Case geometry.jsonValue.GetType
-                    Case GetType(MultiPolygon)
-                        For Each a In DirectCast(geometry.jsonValue, MultiPolygon).coordinates
-                            For Each b In a
-                                For Each c As Double() In b
-                                    If x.Min > c(0) Then
-                                        x.Min = c(0)
-                                    ElseIf x.Max < c(0) Then
-                                        x.Max = c(0)
-                                    End If
-                                    If y.Min > c(1) Then
-                                        y.Min = c(1)
-                                    ElseIf y.Max < c(1) Then
-                                        y.Max = c(1)
-                                    End If
-                                Next
-                            Next
-                        Next
+                    Case GetType(MultiPolygon) : geo = DirectCast(geometry.jsonValue, MultiPolygon).coordinates
+                    Case GetType(Polygon) : geo = {DirectCast(geometry.jsonValue, Polygon).coordinates}
                     Case Else
                         Throw New NotImplementedException
                 End Select
+
+                For Each a In geo
+                    For Each b In a
+                        For Each c As Double() In b
+                            If x.Min > c(0) Then
+                                x.Min = c(0)
+                            ElseIf x.Max < c(0) Then
+                                x.Max = c(0)
+                            End If
+                            If y.Min > c(1) Then
+                                y.Min = c(1)
+                            ElseIf y.Max < c(1) Then
+                                y.Max = c(1)
+                            End If
+                        Next
+                    Next
+                Next
             Next
 
             scaleW = Function(xi) x.ScaleMapping(xi - x.Min, width)
@@ -70,6 +73,7 @@ Namespace GeoMap
             Dim polygon As PointF()
             Dim layers As New List(Of SVGLayer)
             Dim geometry As PolygonVariant
+            Dim geo As Double()()()()
 
             Call doInitial(canvas:=layout.PlotRegion.Size)
 
@@ -81,23 +85,24 @@ Namespace GeoMap
                 geometry = area.geometry
 
                 Select Case geometry.jsonValue.GetType
-                    Case GetType(MultiPolygon)
-                        Dim geo = DirectCast(geometry.jsonValue, MultiPolygon).coordinates
-
-                        For Each a In geo
-                            For Each b In a
-                                polygon = b _
-                                    .Select(Function(t)
-                                                Return New PointF(scaleW(t(Scan0)), scaleH(t(1)))
-                                            End Function) _
-                                    .ToArray
-                                svg.FillPolygon(Brushes.Black, polygon)
-                                layers += svg.GetLastLayer
-                            Next
-                        Next
+                    Case GetType(MultiPolygon) : geo = DirectCast(geometry.jsonValue, MultiPolygon).coordinates
+                    Case GetType(Polygon) : geo = {DirectCast(geometry.jsonValue, Polygon).coordinates}
                     Case Else
                         Throw New NotImplementedException
                 End Select
+
+                For Each a In geo
+                    For Each b In a
+                        polygon = b _
+                            .Select(Function(t)
+                                        Return New PointF(scaleW(t(Scan0)), scaleH(t(1)))
+                                    End Function) _
+                            .ToArray
+
+                        svg.FillPolygon(Brushes.Black, polygon)
+                        layers += svg.GetLastLayer
+                    Next
+                Next
 
                 ' add id and name title
                 If layers = 1 Then
