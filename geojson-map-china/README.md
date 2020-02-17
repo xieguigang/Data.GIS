@@ -1,1 +1,0 @@
-https://github.com/longwosion/geojson-map-china
