@@ -22,13 +22,13 @@ Namespace GeoMap
         Dim features As Feature()
         Dim scaleW As Func(Of Double, Double)
         Dim scaleH As Func(Of Double, Double)
+        Dim x As DoubleRange = {0, 0}
+        Dim y As DoubleRange = {0, 0}
 
         Private Sub New()
         End Sub
 
         Private Sub doInitial(canvas As SizeF)
-            Dim x As DoubleRange = {0, 0}
-            Dim y As DoubleRange = {0, 0}
             Dim width As DoubleRange = {0.0, canvas.Width}
             Dim height As DoubleRange = {0.0, canvas.Height}
             Dim geo As Double()()()()
