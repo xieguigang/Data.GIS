@@ -99,7 +99,7 @@ Namespace GeoMap
                                     End Function) _
                             .ToArray
 
-                        svg.FillPolygon(Brushes.Black, polygon)
+                        svg.FillPolygon(Brushes.Transparent, polygon)
                         layers += svg.GetLastLayer
                     Next
                 Next

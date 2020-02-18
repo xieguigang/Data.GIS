@@ -58,6 +58,10 @@ Public Module Extensions
 
             names = administrative(id)
             layer.class = names.Name
+
+            For Each el In layer.polygon
+                el.class = names.Name
+            Next
         Next
 
         Return map
