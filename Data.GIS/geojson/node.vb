@@ -33,6 +33,7 @@ Namespace GeoMap.geojson
 
     Public Class Feature : Inherits node
 
+        Public Property id As String
         Public Property geometry As PolygonVariant
         Public Property properties As FeatureProperties
 
@@ -44,6 +45,9 @@ Namespace GeoMap.geojson
         Public Property name As String
         Public Property cp As Double()
         Public Property childNum As String
+
+        Public Property longitude As Double
+        Public Property latitude As Double
 
         Public Function TryGetValue(propName$, default$) As String
             Select Case propName
