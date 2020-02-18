@@ -32,6 +32,8 @@ Namespace GeoMap
             Dim width As DoubleRange = {0.0, canvas.Width}
             Dim height As DoubleRange = {0.0, canvas.Height}
             Dim geo As Double()()()()
+            Dim xl As New List(Of Double)
+            Dim yl As New List(Of Double)
 
             For Each area As Feature In features
                 Dim geometry As PolygonVariant = area.geometry
@@ -46,23 +48,17 @@ Namespace GeoMap
                 For Each a In geo
                     For Each b In a
                         For Each c As Double() In b
-                            If x.Min > c(0) Then
-                                x.Min = c(0)
-                            ElseIf x.Max < c(0) Then
-                                x.Max = c(0)
-                            End If
-                            If y.Min > c(1) Then
-                                y.Min = c(1)
-                            ElseIf y.Max < c(1) Then
-                                y.Max = c(1)
-                            End If
+                            xl += c(0)
+                            yl += c(1)
                         Next
                     Next
                 Next
             Next
 
-            scaleW = Function(xi) x.ScaleMapping(xi - x.Min, width)
-            scaleH = Function(yi) height.Max - y.ScaleMapping(yi - y.Min, height)
+            x = xl.ToArray
+            y = yl.ToArray
+            scaleW = Function(xi) x.ScaleMapping(xi, width)
+            scaleH = Function(yi) height.Max - y.ScaleMapping(yi, height)
         End Sub
 
         Public Sub Plot(ByRef g As IGraphics, layout As GraphicsRegion)
