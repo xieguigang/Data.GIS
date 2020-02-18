@@ -29,8 +29,8 @@ Namespace GeoMap
         End Sub
 
         Private Sub doInitial(canvas As SizeF)
-            Dim width As DoubleRange = {0.0, canvas.Width}
-            Dim height As DoubleRange = {0.0, canvas.Height}
+            ' Dim width As DoubleRange = {0.0, canvas.Width}
+            ' Dim height As DoubleRange = {0.0, canvas.Height}
             Dim geo As Double()()()()
             Dim xl As New List(Of Double)
             Dim yl As New List(Of Double)
@@ -55,10 +55,30 @@ Namespace GeoMap
                 Next
             Next
 
+            Dim setWidth = canvas.Width
+            Dim setHeight = canvas.Height
+            Dim imagewidth = xl.Max - xl.Min
+            Dim imageheight = yl.Max - yl.Min
+            Dim xmin = xl.Min
+            Dim ymin = yl.Min
+
             x = xl.ToArray
             y = yl.ToArray
-            scaleW = Function(xi) x.ScaleMapping(xi, width)
-            scaleH = Function(yi) height.Max - y.ScaleMapping(yi, height)
+
+            If setWidth / imagewidth < setHeight / imageheight Then
+                Dim scale = (setWidth / imagewidth)
+
+                scaleW = Function(xi) (xi - xmin) * scale
+                scaleH = Function(yi) setHeight - (yi - ymin) * scale
+            Else
+                Dim scale = (setHeight / imageheight)
+
+                scaleW = Function(xi) (xi - xmin) * scale
+                scaleH = Function(yi) setHeight - (yi - ymin) * scale
+            End If
+
+            ' scaleW = Function(xi) x.ScaleMapping(xi, width)
+            ' scaleH = Function(yi) height.Max - y.ScaleMapping(yi, height)
         End Sub
 
         Public Sub Plot(ByRef g As IGraphics, layout As GraphicsRegion)
