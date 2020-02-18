@@ -28,7 +28,7 @@ Namespace GeoMap
         Private Sub New()
         End Sub
 
-        Private Sub doInitial(canvas As SizeF)
+        Private Sub doInitial(canvas As Rectangle)
             ' Dim width As DoubleRange = {0.0, canvas.Width}
             ' Dim height As DoubleRange = {0.0, canvas.Height}
             Dim geo As Double()()()()
@@ -68,13 +68,13 @@ Namespace GeoMap
             If setWidth / imagewidth < setHeight / imageheight Then
                 Dim scale = (setWidth / imagewidth)
 
-                scaleW = Function(xi) (xi - xmin) * scale
-                scaleH = Function(yi) setHeight - (yi - ymin) * scale
+                scaleW = Function(xi) (xi - xmin) * scale + canvas.Left
+                scaleH = Function(yi) setHeight - (yi - ymin) * scale + canvas.Top
             Else
                 Dim scale = (setHeight / imageheight)
 
-                scaleW = Function(xi) (xi - xmin) * scale
-                scaleH = Function(yi) setHeight - (yi - ymin) * scale
+                scaleW = Function(xi) (xi - xmin) * scale + canvas.Left
+                scaleH = Function(yi) setHeight - (yi - ymin) * scale + canvas.Top
             End If
 
             ' scaleW = Function(xi) x.ScaleMapping(xi, width)
@@ -91,7 +91,7 @@ Namespace GeoMap
             Dim geometry As PolygonVariant
             Dim geo As Double()()()()
 
-            Call doInitial(canvas:=layout.PlotRegion.Size)
+            Call doInitial(canvas:=layout.PlotRegion)
 
             For Each area As Feature In features
                 id = area.properties.TryGetValue("id", [default]:=++guid)
@@ -148,7 +148,7 @@ Namespace GeoMap
         Public Shared Function Render(geo As FeatureCollection, Optional size$ = "5000,3000") As SVGData
             Return g.GraphicsPlots(
                 size:=size.SizeParser,
-                padding:=g.ZeroPadding,
+                padding:=g.DefaultPadding,
                 bg:="white",
                 plotAPI:=AddressOf New GeoMapRender() With {.features = geo.features}.Plot,
                 driver:=Drivers.SVG
