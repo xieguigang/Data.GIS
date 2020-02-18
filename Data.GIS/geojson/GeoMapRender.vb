@@ -145,14 +145,20 @@ Namespace GeoMap
             Return svg
         End Function
 
-        Public Shared Function Render(geo As FeatureCollection, Optional size$ = "5000,3000") As SVGData
-            Return g.GraphicsPlots(
+        Public Shared Function Render(geo As FeatureCollection, Optional size$ = "5000,3000", Optional defaultPolygonFill$ = "white") As SVGData
+            Dim map As SVGData = g.GraphicsPlots(
                 size:=size.SizeParser,
                 padding:=g.DefaultPadding,
                 bg:="white",
                 plotAPI:=AddressOf New GeoMapRender() With {.features = geo.features}.Plot,
                 driver:=Drivers.SVG
             )
+
+            map.SVG.styles.Add("  polygon{
+   fill: #FFFFFF; stroke: black;
+  }")
+
+            Return map
         End Function
 
         Public Shared Function RenderFolder(geometry$, Optional size$ = "5000,3000") As SVGData
