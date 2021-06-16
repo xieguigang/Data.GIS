@@ -3,7 +3,8 @@ Imports System.Runtime.CompilerServices
 Imports Microsoft.VisualBasic.Imaging
 Imports Microsoft.VisualBasic.Imaging.Drawing2D
 Imports Microsoft.VisualBasic.Imaging.Driver
-Imports Microsoft.VisualBasic.MIME.Markup.HTML.CSS
+Imports Microsoft.VisualBasic.MIME.Html.CSS
+Imports stdNum = System.Math
 
 Public Module Legend
 
@@ -37,7 +38,7 @@ Public Module Legend
         y = margin.Vertical * 2
         font = New Font(FontFace.MicrosoftYaHei, 32)
 
-        Call g.DrawString(Math.Round(designer.raw.Max, 1), font, Brushes.Black, New Point(left, y))
+        Call g.DrawString(stdNum.Round(designer.raw.Max, 1), font, Brushes.Black, New Point(left, y))
 
         For i As Integer = designer.Depth - 1 To 0 Step -1
             Call g.FillRectangle(
@@ -49,7 +50,7 @@ Public Module Legend
 
         fSize = g.MeasureString(designer.raw.Min, font)
         Call g.DrawString(
-            Math.Round(designer.raw.Min, 1),
+            stdNum.Round(designer.raw.Min, 1),
             font,
             Brushes.Black,
             New Point(left, If(designer.Depth > 100, d, 0) + y - fSize.Height))
